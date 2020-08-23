@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { ProductsComponent } from './pages/products/products.component';
 import { AboutComponent } from './pages/about/about.component';
+import { WipComponent } from './pages/wip/wip.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { AboutComponent } from './pages/about/about.component';
     HomeComponent,
     ProductsComponent,
     AboutComponent,
+    WipComponent,
   ],
   imports: [
     BrowserModule,
