@@ -1,7 +1,12 @@
-- name: Deploy to GitHub Pages
-  uses: peaceiris/actions-gh-pages@v3.6.4
-  with:
-    # Set an input directory for deployment.
-    publish_dir: dist
-    # Set custom domain
-    cname: ar.bitrary.dev # optional
+name: Deploy to GitHub Pages
+on: [push, pull_request]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peaceiris/actions-gh-pages@v3.6.4
+        with:
+          # Set an input directory for deployment.
+          publish_dir: dist
+          # Set custom domain
+          cname: ar.bitrary.dev # optional
