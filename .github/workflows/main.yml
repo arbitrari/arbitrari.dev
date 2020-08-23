@@ -6,6 +6,8 @@ jobs:
     steps:
       - uses: peaceiris/actions-gh-pages@v3.6.4
         with:
+          # Use token to allow r/w access for runner  
+          github_token: ${{ secrets.GITHUB_TOKEN }}  
           # Set an input directory for deployment.
           publish_dir: dist
           # Set custom domain
