@@ -1,1 +1,95 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+$arbitrary-black: (
+    50: #000000,
+    contrast: (
+        50: white
+    )
+);
+
+$arbitrary-blue: (
+    50: rgb(48, 63, 255),
+    contrast: (
+        50: white
+    )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$arbitrary-primary: mat-palette($arbitrary-black);
+$arbitrary-accent: mat-palette($arbitrary-blue);
+
+// The warn palette is optional (defaults to red).
+$arbitrary-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$arbitrary-theme: mat-light-theme($arbitrary-primary, $arbitrary-accent, $arbitrary-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($arbitrary-theme);
+
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+    --arbitrary-blue-rgb: 48, 63, 255;
+    --arbitrary-black-rgb: 0, 0, 0;
+    --arbitrary-gray-rgb: 18, 18, 18;
+    --arbitrary-white-rgb: 220, 220, 220;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+
+
+.mat-primary {
+    background: rgb(var(--arbitrary-black-rgb));
+    color: rgb(var(--arbitrary-white-rgb));
+}
+
+.mat-secondary {
+    background: rgb(var(--arbitrary-blue-rgb));
+    color: rgb(var(--arbitrary-black-rgb));
+}
+
+mat-sidenav .mat-drawer-inner-container {
+    display: flex !important;
+    flex-direction: column;
+}
+
+mat-nav-list {
+    flex: 2 0 auto;
+}
+
+div.top-dots {
+    color: rgb(var(--arbitrary-blue-rgb));
+    width: 500px;
+    height: 250px;
+
+    h1 {
+        font-weight: 600;
+        font-size: 128px;
+        margin-left: 128px;
+        padding-top: 54px;
+        color: rgb(var(--arbitrary-white-rgb));
+        line-height: 120px;
+    }
+}
+
+mat-card {
+    background-color: rgb(var(--arbitrary-gray-rgb)) !important;
+    // border: solid 2px rgb(var(--arbirary-blue-rgb));
+    color: rgb(var(--arbitrary-white-rgb)) !important;
+    margin: 16px;
+}
