@@ -1,10 +1,21 @@
 name: Deploy to GitHub Pages
 on: [push, pull_request]
 jobs:
-  run:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: peaceiris/actions-gh-pages@v3.6.4
+      - uses: actions/checkout@v2
+      
+      - name: Set up Node
+        uses: actions@setup-node@v2.1.0
+        with:
+          node-version: '12.x'
+          
+      - name: build
+        run: npm run build
+          
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3.6.4
         with:
           # Use token to allow r/w access for runner  
           github_token: ${{ secrets.GITHUB_TOKEN }}  
