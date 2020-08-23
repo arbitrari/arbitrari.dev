@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "publish": "npm run build && ngh --repo=https://GH_TOKEN@github.com/arbitrarydot/ar.bitrary.dev.git --name=\"JaxonWright\" --email=jaxonhwright@gmail.com --no-silent",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
