@@ -25,6 +25,8 @@
       </button>
       <span *ngIf="isHandset$ | async">arbitrary</span>
     </mat-toolbar>
-    <router-outlet></router-outlet>
+    <div class="app-frame">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

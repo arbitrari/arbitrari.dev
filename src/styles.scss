@@ -72,12 +72,18 @@ mat-nav-list {
     flex: 2 0 auto;
 }
 
+.app-frame {
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
 div.top-dots {
     color: rgb(var(--arbitrary-blue-rgb));
     width: 500px;
     height: 250px;
     max-width: 50vw;
     max-height: 25vw;
+    margin-left: -16px;
 
     h1 {
         font-weight: 600;
