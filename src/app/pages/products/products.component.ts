@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 interface Product {
   name : string,    // product name
@@ -10,6 +10,7 @@ interface Product {
 }
 @Component({
   selector: 'app-products',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
