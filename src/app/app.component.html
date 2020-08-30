@@ -3,14 +3,14 @@
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
-    <mat-toolbar color="primary"></mat-toolbar>
+    <mat-toolbar color="primary">arbitrary</mat-toolbar>
     <mat-nav-list>
-      <!-- <a mat-list-item [routerLink]="['/']" routerLinkActive="active-route" [routerLinkActiveOptions]="{exact: true}">home</a>
+      <a mat-list-item [routerLink]="['/']" routerLinkActive="active-route" [routerLinkActiveOptions]="{exact: true}">home</a>
       <a mat-list-item [routerLink]="['products']" routerLinkActive="active-route">products</a>
-      <a mat-list-item [routerLink]="['about']" routerLinkActive="active-route">about</a> -->
+      <a mat-list-item [routerLink]="['about']" routerLinkActive="active-route">about</a>
     </mat-nav-list>
     <mat-toolbar class="footer" color="primary">
-      &copy; 2020 arbirary
+      &copy; {{currentYear}} arbirary
     </mat-toolbar>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -23,8 +23,10 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span *ngIf="isHandset$ | async"></span>
+      <span *ngIf="isHandset$ | async">arbitrary</span>
     </mat-toolbar>
-    <router-outlet></router-outlet>
+    <div class="app-frame">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

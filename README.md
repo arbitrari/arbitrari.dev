@@ -1,27 +1,15 @@
-# Arbitrary
+# [insert logo here]
+https://ar.bitrary.dev
+___
+Welcome to the repository for the portfolio website for arbitrary. We are a software development group that primarily makes applications and tools revolving around Tesla vehicles.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.5.
+## Develop
+This is an Angular application, so when you clone the repository, you must run `npm install` to grab all dependencies, and then use `ng serve` to host a live development copy at `http://localhost:4200`. This should be familiary with you if you are an Angular developer.
 
-## Development server
+## Deploy
+Deployment is handled automatically by a GitHub Action that runs on every push and pull request to the master branch. Assuming there are no issues, it will place the built files in the _gh-pages_ branch, which is then served by GitHub Pages.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## May I Join The Team?
+All of our projects are open-source and hosted in public GitHub repositories. If you have ideas for improvements, leave the idea in the issues of the project's repo and consider making a pull request. If we like the idea, and all looks good, we'll add it!
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+If your work is really good, we will consider adding you on to the development team.

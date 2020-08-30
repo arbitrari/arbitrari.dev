@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css?family=Cairo&display=swap');
+@import url('https://fonts.googleapis.com/css?family=ABeeZee');
+
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
@@ -72,18 +75,26 @@ mat-nav-list {
     flex: 2 0 auto;
 }
 
+.app-frame {
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
 div.top-dots {
     color: rgb(var(--arbitrary-blue-rgb));
     width: 500px;
     height: 250px;
+    max-width: 50vw;
+    max-height: 25vw;
+    margin-left: -16px;
 
     h1 {
         font-weight: 600;
-        font-size: 128px;
-        margin-left: 128px;
-        padding-top: 54px;
+        font-size: min(12vw, 128px);
+        margin-left: 64px;
+        padding-top: min(7vw, 54px);
         color: rgb(var(--arbitrary-white-rgb));
-        line-height: 120px;
+        line-height: min(12vw, 120px);
     }
 }
 
