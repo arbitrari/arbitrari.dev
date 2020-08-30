@@ -23,7 +23,8 @@ mat-toolbar.footer {
     font-weight: 300;
 }
 
-.active-route {
+.active-route,
+a.mat-list-item:hover {
     font-weight: 500;
     background: rgb(var(--arbitrary-gray-rgb));
 }

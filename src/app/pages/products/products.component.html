@@ -2,26 +2,47 @@
   <h1>products</h1>
 </div>
 <h2>in production</h2>
-<mat-card class="product-card">
+<mat-card class="product-card" *ngFor="let prod of productionProds">
   <mat-card-header>
-    <mat-card-title>
-      testube
+    <mat-card-title [style.font-family]="prod.font ? prod.font : 'inherit'">
+      {{prod.name}}
+    </mat-card-title>
+    <!-- <mat-card-subtitle>
+      <mat-chip-list>
+        <mat-chip>
+          {{prod.license}}
+        </mat-chip>
+      </mat-chip-list>
+    </mat-card-subtitle> -->
+  </mat-card-header>
+  <mat-card-content>
+    {{prod.desc}}
+  </mat-card-content>
+  <mat-card-actions>
+    <a mat-button *ngIf="prod.repoURL" [href]="prod.repoURL" target="_blank">
+      GitHub Repo
+    </a>
+    <a mat-button *ngIf="prod.prodURL" [href]="prod.prodURL" target="_blank">
+      View Product
+    </a>
+  </mat-card-actions>
+</mat-card>
+<h2>in development</h2>
+<mat-card class="product-card" *ngFor="let prod of devProds">
+  <mat-card-header>
+    <mat-card-title [style.font-family]="prod.font ? prod.font : 'inherit'">
+      {{prod.name}}
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    a simple web app that allows Tesla drivers to easily access fullscreen media in their cars while parked. Normally,
-    doing this is a complicated process that is harder than it needs to be. Testube makes the process as easy as
-    possible, ensuring you get to your media quickly.
+    {{prod.desc}}
   </mat-card-content>
+  <mat-card-actions>
+    <a mat-button *ngIf="prod.repoURL" [href]="prod.repoURL" target="_blank">
+      GitHub Repo
+    </a>
+    <a mat-button *ngIf="prod.prodURL" [href]="prod.prodURL" target="_blank">
+      View Product
+    </a>
+  </mat-card-actions>
 </mat-card>
-<h2>in development</h2>
-<mat-card class="product-card">
-    <mat-card-header>
-      <mat-card-title>
-        copilot
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      a one-stop-shop for managing your tesla vehicle on any of your devices. 
-    </mat-card-content>
-  </mat-card>

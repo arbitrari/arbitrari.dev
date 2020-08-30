@@ -1,9 +1,14 @@
 .product-card {
-    max-width: 800px;
+    max-width: 400px;
 }
 
 h2 {
     font-size: 40px;
     line-height: 40px;
     margin-top: 16px;
+}
+
+mat-card-title {
+    font-size: 30px !important;
+    margin-left: -16px;
 }
