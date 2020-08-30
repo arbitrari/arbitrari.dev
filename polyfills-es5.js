@@ -14679,18 +14679,18 @@
     },
 
     /***/
-    "./node_modules/zone.js/dist/zone-evergreen.js":
-    /*!*****************************************************!*\
-      !*** ./node_modules/zone.js/dist/zone-evergreen.js ***!
-      \*****************************************************/
+    "./node_modules/zone.js/fesm2015/zone-legacy.js":
+    /*!******************************************************!*\
+      !*** ./node_modules/zone.js/fesm2015/zone-legacy.js ***!
+      \******************************************************/
 
     /*! no static exports found */
 
     /***/
-    function node_modulesZoneJsDistZoneEvergreenJs(module, exports, __webpack_require__) {
+    function node_modulesZoneJsFesm2015ZoneLegacyJs(module, exports, __webpack_require__) {
       var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
       /**
-      * @license Angular v9.1.0-next.4+61.sha-e552591.with-local-changes
+      * @license Angular v10.1.0-next.6+7.sha-aaa1d8e
       * (c) 2010-2020 Google LLC. https://angular.io/
       * License: MIT
       */
@@ -14702,7 +14702,578 @@
         'use strict';
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
+         *
+         * Use of this source code is governed by an MIT-style license that can be
+         * found in the LICENSE file at https://angular.io/license
+         */
+
+        /*
+         * This is necessary for Chrome and Chrome mobile, to enable
+         * things like redefining `createdCallback` on an element.
+         */
+
+        var zoneSymbol;
+
+        var _defineProperty;
+
+        var _getOwnPropertyDescriptor;
+
+        var _create;
+
+        var unconfigurablesKey;
+
+        function propertyPatch() {
+          zoneSymbol = Zone.__symbol__;
+          _defineProperty = Object[zoneSymbol('defineProperty')] = Object.defineProperty;
+          _getOwnPropertyDescriptor = Object[zoneSymbol('getOwnPropertyDescriptor')] = Object.getOwnPropertyDescriptor;
+          _create = Object.create;
+          unconfigurablesKey = zoneSymbol('unconfigurables');
+
+          Object.defineProperty = function (obj, prop, desc) {
+            if (isUnconfigurable(obj, prop)) {
+              throw new TypeError('Cannot assign to read only property \'' + prop + '\' of ' + obj);
+            }
+
+            var originalConfigurableFlag = desc.configurable;
+
+            if (prop !== 'prototype') {
+              desc = rewriteDescriptor(obj, prop, desc);
+            }
+
+            return _tryDefineProperty(obj, prop, desc, originalConfigurableFlag);
+          };
+
+          Object.defineProperties = function (obj, props) {
+            Object.keys(props).forEach(function (prop) {
+              Object.defineProperty(obj, prop, props[prop]);
+            });
+            return obj;
+          };
+
+          Object.create = function (obj, proto) {
+            if (typeof proto === 'object' && !Object.isFrozen(proto)) {
+              Object.keys(proto).forEach(function (prop) {
+                proto[prop] = rewriteDescriptor(obj, prop, proto[prop]);
+              });
+            }
+
+            return _create(obj, proto);
+          };
+
+          Object.getOwnPropertyDescriptor = function (obj, prop) {
+            var desc = _getOwnPropertyDescriptor(obj, prop);
+
+            if (desc && isUnconfigurable(obj, prop)) {
+              desc.configurable = false;
+            }
+
+            return desc;
+          };
+        }
+
+        function _redefineProperty(obj, prop, desc) {
+          var originalConfigurableFlag = desc.configurable;
+          desc = rewriteDescriptor(obj, prop, desc);
+          return _tryDefineProperty(obj, prop, desc, originalConfigurableFlag);
+        }
+
+        function isUnconfigurable(obj, prop) {
+          return obj && obj[unconfigurablesKey] && obj[unconfigurablesKey][prop];
+        }
+
+        function rewriteDescriptor(obj, prop, desc) {
+          // issue-927, if the desc is frozen, don't try to change the desc
+          if (!Object.isFrozen(desc)) {
+            desc.configurable = true;
+          }
+
+          if (!desc.configurable) {
+            // issue-927, if the obj is frozen, don't try to set the desc to obj
+            if (!obj[unconfigurablesKey] && !Object.isFrozen(obj)) {
+              _defineProperty(obj, unconfigurablesKey, {
+                writable: true,
+                value: {}
+              });
+            }
+
+            if (obj[unconfigurablesKey]) {
+              obj[unconfigurablesKey][prop] = true;
+            }
+          }
+
+          return desc;
+        }
+
+        function _tryDefineProperty(obj, prop, desc, originalConfigurableFlag) {
+          try {
+            return _defineProperty(obj, prop, desc);
+          } catch (error) {
+            if (desc.configurable) {
+              // In case of errors, when the configurable flag was likely set by rewriteDescriptor(), let's
+              // retry with the original flag value
+              if (typeof originalConfigurableFlag == 'undefined') {
+                delete desc.configurable;
+              } else {
+                desc.configurable = originalConfigurableFlag;
+              }
+
+              try {
+                return _defineProperty(obj, prop, desc);
+              } catch (error) {
+                var descJson = null;
+
+                try {
+                  descJson = JSON.stringify(desc);
+                } catch (error) {
+                  descJson = desc.toString();
+                }
+
+                console.log("Attempting to configure '".concat(prop, "' with descriptor '").concat(descJson, "' on object '").concat(obj, "' and got error, giving up: ").concat(error));
+              }
+            } else {
+              throw error;
+            }
+          }
+        }
+        /**
+         * @license
+         * Copyright Google LLC All Rights Reserved.
+         *
+         * Use of this source code is governed by an MIT-style license that can be
+         * found in the LICENSE file at https://angular.io/license
+         */
+
+
+        function eventTargetLegacyPatch(_global, api) {
+          var _api$getGlobalObjects = api.getGlobalObjects(),
+              eventNames = _api$getGlobalObjects.eventNames,
+              globalSources = _api$getGlobalObjects.globalSources,
+              zoneSymbolEventNames = _api$getGlobalObjects.zoneSymbolEventNames,
+              TRUE_STR = _api$getGlobalObjects.TRUE_STR,
+              FALSE_STR = _api$getGlobalObjects.FALSE_STR,
+              ZONE_SYMBOL_PREFIX = _api$getGlobalObjects.ZONE_SYMBOL_PREFIX;
+
+          var WTF_ISSUE_555 = 'Anchor,Area,Audio,BR,Base,BaseFont,Body,Button,Canvas,Content,DList,Directory,Div,Embed,FieldSet,Font,Form,Frame,FrameSet,HR,Head,Heading,Html,IFrame,Image,Input,Keygen,LI,Label,Legend,Link,Map,Marquee,Media,Menu,Meta,Meter,Mod,OList,Object,OptGroup,Option,Output,Paragraph,Pre,Progress,Quote,Script,Select,Source,Span,Style,TableCaption,TableCell,TableCol,Table,TableRow,TableSection,TextArea,Title,Track,UList,Unknown,Video';
+          var NO_EVENT_TARGET = 'ApplicationCache,EventSource,FileReader,InputMethodContext,MediaController,MessagePort,Node,Performance,SVGElementInstance,SharedWorker,TextTrack,TextTrackCue,TextTrackList,WebKitNamedFlow,Window,Worker,WorkerGlobalScope,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload,IDBRequest,IDBOpenDBRequest,IDBDatabase,IDBTransaction,IDBCursor,DBIndex,WebSocket'.split(',');
+          var EVENT_TARGET = 'EventTarget';
+          var apis = [];
+          var isWtf = _global['wtf'];
+          var WTF_ISSUE_555_ARRAY = WTF_ISSUE_555.split(',');
+
+          if (isWtf) {
+            // Workaround for: https://github.com/google/tracing-framework/issues/555
+            apis = WTF_ISSUE_555_ARRAY.map(function (v) {
+              return 'HTML' + v + 'Element';
+            }).concat(NO_EVENT_TARGET);
+          } else if (_global[EVENT_TARGET]) {
+            apis.push(EVENT_TARGET);
+          } else {
+            // Note: EventTarget is not available in all browsers,
+            // if it's not available, we instead patch the APIs in the IDL that inherit from EventTarget
+            apis = NO_EVENT_TARGET;
+          }
+
+          var isDisableIECheck = _global['__Zone_disable_IE_check'] || false;
+          var isEnableCrossContextCheck = _global['__Zone_enable_cross_context_check'] || false;
+          var ieOrEdge = api.isIEOrEdge();
+          var ADD_EVENT_LISTENER_SOURCE = '.addEventListener:';
+          var FUNCTION_WRAPPER = '[object FunctionWrapper]';
+          var BROWSER_TOOLS = 'function __BROWSERTOOLS_CONSOLE_SAFEFUNC() { [native code] }';
+          var pointerEventsMap = {
+            'MSPointerCancel': 'pointercancel',
+            'MSPointerDown': 'pointerdown',
+            'MSPointerEnter': 'pointerenter',
+            'MSPointerHover': 'pointerhover',
+            'MSPointerLeave': 'pointerleave',
+            'MSPointerMove': 'pointermove',
+            'MSPointerOut': 'pointerout',
+            'MSPointerOver': 'pointerover',
+            'MSPointerUp': 'pointerup'
+          }; //  predefine all __zone_symbol__ + eventName + true/false string
+
+          for (var i = 0; i < eventNames.length; i++) {
+            var eventName = eventNames[i];
+            var falseEventName = eventName + FALSE_STR;
+            var trueEventName = eventName + TRUE_STR;
+            var symbol = ZONE_SYMBOL_PREFIX + falseEventName;
+            var symbolCapture = ZONE_SYMBOL_PREFIX + trueEventName;
+            zoneSymbolEventNames[eventName] = {};
+            zoneSymbolEventNames[eventName][FALSE_STR] = symbol;
+            zoneSymbolEventNames[eventName][TRUE_STR] = symbolCapture;
+          } //  predefine all task.source string
+
+
+          for (var _i = 0; _i < WTF_ISSUE_555_ARRAY.length; _i++) {
+            var target = WTF_ISSUE_555_ARRAY[_i];
+            var targets = globalSources[target] = {};
+
+            for (var j = 0; j < eventNames.length; j++) {
+              var _eventName = eventNames[j];
+              targets[_eventName] = target + ADD_EVENT_LISTENER_SOURCE + _eventName;
+            }
+          }
+
+          var checkIEAndCrossContext = function checkIEAndCrossContext(nativeDelegate, delegate, target, args) {
+            if (!isDisableIECheck && ieOrEdge) {
+              if (isEnableCrossContextCheck) {
+                try {
+                  var testString = delegate.toString();
+
+                  if (testString === FUNCTION_WRAPPER || testString == BROWSER_TOOLS) {
+                    nativeDelegate.apply(target, args);
+                    return false;
+                  }
+                } catch (error) {
+                  nativeDelegate.apply(target, args);
+                  return false;
+                }
+              } else {
+                var _testString = delegate.toString();
+
+                if (_testString === FUNCTION_WRAPPER || _testString == BROWSER_TOOLS) {
+                  nativeDelegate.apply(target, args);
+                  return false;
+                }
+              }
+            } else if (isEnableCrossContextCheck) {
+              try {
+                delegate.toString();
+              } catch (error) {
+                nativeDelegate.apply(target, args);
+                return false;
+              }
+            }
+
+            return true;
+          };
+
+          var apiTypes = [];
+
+          for (var _i2 = 0; _i2 < apis.length; _i2++) {
+            var type = _global[apis[_i2]];
+            apiTypes.push(type && type.prototype);
+          } // vh is validateHandler to check event handler
+          // is valid or not(for security check)
+
+
+          api.patchEventTarget(_global, apiTypes, {
+            vh: checkIEAndCrossContext,
+            transferEventName: function transferEventName(eventName) {
+              var pointerEventName = pointerEventsMap[eventName];
+              return pointerEventName || eventName;
+            }
+          });
+          Zone[api.symbol('patchEventTarget')] = !!_global[EVENT_TARGET];
+          return true;
+        }
+        /**
+         * @license
+         * Copyright Google LLC All Rights Reserved.
+         *
+         * Use of this source code is governed by an MIT-style license that can be
+         * found in the LICENSE file at https://angular.io/license
+         */
+        // we have to patch the instance since the proto is non-configurable
+
+
+        function apply(api, _global) {
+          var _api$getGlobalObjects2 = api.getGlobalObjects(),
+              ADD_EVENT_LISTENER_STR = _api$getGlobalObjects2.ADD_EVENT_LISTENER_STR,
+              REMOVE_EVENT_LISTENER_STR = _api$getGlobalObjects2.REMOVE_EVENT_LISTENER_STR;
+
+          var WS = _global.WebSocket; // On Safari window.EventTarget doesn't exist so need to patch WS add/removeEventListener
+          // On older Chrome, no need since EventTarget was already patched
+
+          if (!_global.EventTarget) {
+            api.patchEventTarget(_global, [WS.prototype]);
+          }
+
+          _global.WebSocket = function (x, y) {
+            var socket = arguments.length > 1 ? new WS(x, y) : new WS(x);
+            var proxySocket;
+            var proxySocketProto; // Safari 7.0 has non-configurable own 'onmessage' and friends properties on the socket instance
+
+            var onmessageDesc = api.ObjectGetOwnPropertyDescriptor(socket, 'onmessage');
+
+            if (onmessageDesc && onmessageDesc.configurable === false) {
+              proxySocket = api.ObjectCreate(socket); // socket have own property descriptor 'onopen', 'onmessage', 'onclose', 'onerror'
+              // but proxySocket not, so we will keep socket as prototype and pass it to
+              // patchOnProperties method
+
+              proxySocketProto = socket;
+              [ADD_EVENT_LISTENER_STR, REMOVE_EVENT_LISTENER_STR, 'send', 'close'].forEach(function (propName) {
+                proxySocket[propName] = function () {
+                  var args = api.ArraySlice.call(arguments);
+
+                  if (propName === ADD_EVENT_LISTENER_STR || propName === REMOVE_EVENT_LISTENER_STR) {
+                    var eventName = args.length > 0 ? args[0] : undefined;
+
+                    if (eventName) {
+                      var propertySymbol = Zone.__symbol__('ON_PROPERTY' + eventName);
+
+                      socket[propertySymbol] = proxySocket[propertySymbol];
+                    }
+                  }
+
+                  return socket[propName].apply(socket, args);
+                };
+              });
+            } else {
+              // we can patch the real socket
+              proxySocket = socket;
+            }
+
+            api.patchOnProperties(proxySocket, ['close', 'error', 'message', 'open'], proxySocketProto);
+            return proxySocket;
+          };
+
+          var globalWebSocket = _global['WebSocket'];
+
+          for (var prop in WS) {
+            globalWebSocket[prop] = WS[prop];
+          }
+        }
+        /**
+         * @license
+         * Copyright Google LLC All Rights Reserved.
+         *
+         * Use of this source code is governed by an MIT-style license that can be
+         * found in the LICENSE file at https://angular.io/license
+         */
+
+
+        function propertyDescriptorLegacyPatch(api, _global) {
+          var _api$getGlobalObjects3 = api.getGlobalObjects(),
+              isNode = _api$getGlobalObjects3.isNode,
+              isMix = _api$getGlobalObjects3.isMix;
+
+          if (isNode && !isMix) {
+            return;
+          }
+
+          if (!canPatchViaPropertyDescriptor(api, _global)) {
+            var supportsWebSocket = typeof WebSocket !== 'undefined'; // Safari, Android browsers (Jelly Bean)
+
+            patchViaCapturingAllTheEvents(api);
+            api.patchClass('XMLHttpRequest');
+
+            if (supportsWebSocket) {
+              apply(api, _global);
+            }
+
+            Zone[api.symbol('patchEvents')] = true;
+          }
+        }
+
+        function canPatchViaPropertyDescriptor(api, _global) {
+          var _api$getGlobalObjects4 = api.getGlobalObjects(),
+              isBrowser = _api$getGlobalObjects4.isBrowser,
+              isMix = _api$getGlobalObjects4.isMix;
+
+          if ((isBrowser || isMix) && !api.ObjectGetOwnPropertyDescriptor(HTMLElement.prototype, 'onclick') && typeof Element !== 'undefined') {
+            // WebKit https://bugs.webkit.org/show_bug.cgi?id=134364
+            // IDL interface attributes are not configurable
+            var desc = api.ObjectGetOwnPropertyDescriptor(Element.prototype, 'onclick');
+            if (desc && !desc.configurable) return false; // try to use onclick to detect whether we can patch via propertyDescriptor
+            // because XMLHttpRequest is not available in service worker
+
+            if (desc) {
+              api.ObjectDefineProperty(Element.prototype, 'onclick', {
+                enumerable: true,
+                configurable: true,
+                get: function get() {
+                  return true;
+                }
+              });
+              var div = document.createElement('div');
+              var result = !!div.onclick;
+              api.ObjectDefineProperty(Element.prototype, 'onclick', desc);
+              return result;
+            }
+          }
+
+          var XMLHttpRequest = _global['XMLHttpRequest'];
+
+          if (!XMLHttpRequest) {
+            // XMLHttpRequest is not available in service worker
+            return false;
+          }
+
+          var ON_READY_STATE_CHANGE = 'onreadystatechange';
+          var XMLHttpRequestPrototype = XMLHttpRequest.prototype;
+          var xhrDesc = api.ObjectGetOwnPropertyDescriptor(XMLHttpRequestPrototype, ON_READY_STATE_CHANGE); // add enumerable and configurable here because in opera
+          // by default XMLHttpRequest.prototype.onreadystatechange is undefined
+          // without adding enumerable and configurable will cause onreadystatechange
+          // non-configurable
+          // and if XMLHttpRequest.prototype.onreadystatechange is undefined,
+          // we should set a real desc instead a fake one
+
+          if (xhrDesc) {
+            api.ObjectDefineProperty(XMLHttpRequestPrototype, ON_READY_STATE_CHANGE, {
+              enumerable: true,
+              configurable: true,
+              get: function get() {
+                return true;
+              }
+            });
+            var req = new XMLHttpRequest();
+
+            var _result = !!req.onreadystatechange; // restore original desc
+
+
+            api.ObjectDefineProperty(XMLHttpRequestPrototype, ON_READY_STATE_CHANGE, xhrDesc || {});
+            return _result;
+          } else {
+            var SYMBOL_FAKE_ONREADYSTATECHANGE = api.symbol('fake');
+            api.ObjectDefineProperty(XMLHttpRequestPrototype, ON_READY_STATE_CHANGE, {
+              enumerable: true,
+              configurable: true,
+              get: function get() {
+                return this[SYMBOL_FAKE_ONREADYSTATECHANGE];
+              },
+              set: function set(value) {
+                this[SYMBOL_FAKE_ONREADYSTATECHANGE] = value;
+              }
+            });
+
+            var _req = new XMLHttpRequest();
+
+            var detectFunc = function detectFunc() {};
+
+            _req.onreadystatechange = detectFunc;
+
+            var _result2 = _req[SYMBOL_FAKE_ONREADYSTATECHANGE] === detectFunc;
+
+            _req.onreadystatechange = null;
+            return _result2;
+          }
+        } // Whenever any eventListener fires, we check the eventListener target and all parents
+        // for `onwhatever` properties and replace them with zone-bound functions
+        // - Chrome (for now)
+
+
+        function patchViaCapturingAllTheEvents(api) {
+          var _api$getGlobalObjects5 = api.getGlobalObjects(),
+              eventNames = _api$getGlobalObjects5.eventNames;
+
+          var unboundKey = api.symbol('unbound');
+
+          var _loop = function _loop(i) {
+            var property = eventNames[i];
+            var onproperty = 'on' + property;
+            self.addEventListener(property, function (event) {
+              var elt = event.target,
+                  bound,
+                  source;
+
+              if (elt) {
+                source = elt.constructor['name'] + '.' + onproperty;
+              } else {
+                source = 'unknown.' + onproperty;
+              }
+
+              while (elt) {
+                if (elt[onproperty] && !elt[onproperty][unboundKey]) {
+                  bound = api.wrapWithCurrentZone(elt[onproperty], source);
+                  bound[unboundKey] = elt[onproperty];
+                  elt[onproperty] = bound;
+                }
+
+                elt = elt.parentElement;
+              }
+            }, true);
+          };
+
+          for (var i = 0; i < eventNames.length; i++) {
+            _loop(i);
+          }
+        }
+        /**
+         * @license
+         * Copyright Google LLC All Rights Reserved.
+         *
+         * Use of this source code is governed by an MIT-style license that can be
+         * found in the LICENSE file at https://angular.io/license
+         */
+
+
+        function registerElementPatch(_global, api) {
+          var _api$getGlobalObjects6 = api.getGlobalObjects(),
+              isBrowser = _api$getGlobalObjects6.isBrowser,
+              isMix = _api$getGlobalObjects6.isMix;
+
+          if (!isBrowser && !isMix || !('registerElement' in _global.document)) {
+            return;
+          }
+
+          var callbacks = ['createdCallback', 'attachedCallback', 'detachedCallback', 'attributeChangedCallback'];
+          api.patchCallbacks(api, document, 'Document', 'registerElement', callbacks);
+        }
+        /**
+         * @license
+         * Copyright Google LLC All Rights Reserved.
+         *
+         * Use of this source code is governed by an MIT-style license that can be
+         * found in the LICENSE file at https://angular.io/license
+         */
+
+
+        (function (_global) {
+          var symbolPrefix = _global['__Zone_symbol_prefix'] || '__zone_symbol__';
+
+          function __symbol__(name) {
+            return symbolPrefix + name;
+          }
+
+          _global[__symbol__('legacyPatch')] = function () {
+            var Zone = _global['Zone'];
+
+            Zone.__load_patch('defineProperty', function (global, Zone, api) {
+              api._redefineProperty = _redefineProperty;
+              propertyPatch();
+            });
+
+            Zone.__load_patch('registerElement', function (global, Zone, api) {
+              registerElementPatch(global, api);
+            });
+
+            Zone.__load_patch('EventTargetLegacy', function (global, Zone, api) {
+              eventTargetLegacyPatch(global, api);
+              propertyDescriptorLegacyPatch(api, global);
+            });
+          };
+        })(typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {});
+      });
+      /***/
+
+    },
+
+    /***/
+    "./node_modules/zone.js/fesm2015/zone.js":
+    /*!***********************************************!*\
+      !*** ./node_modules/zone.js/fesm2015/zone.js ***!
+      \***********************************************/
+
+    /*! no static exports found */
+
+    /***/
+    function node_modulesZoneJsFesm2015ZoneJs(module, exports, __webpack_require__) {
+      var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
+      /**
+      * @license Angular v10.1.0-next.6+7.sha-aaa1d8e
+      * (c) 2010-2020 Google LLC. https://angular.io/
+      * License: MIT
+      */
+
+
+      (function (factory) {
+        true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? __WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module) : __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : undefined;
+      })(function () {
+        'use strict';
+        /**
+         * @license
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -15463,14 +16034,6 @@
             patchMacroTask: function patchMacroTask() {
               return noop;
             },
-            setNativePromise: function setNativePromise(NativePromise) {
-              // sometimes NativePromise.resolve static function
-              // is not ready yet, (such as core-js/es6.promise)
-              // so we need to check here.
-              if (NativePromise && typeof NativePromise.resolve === 'function') {
-                nativeMicroTaskQueuePromise = NativePromise.resolve(0);
-              }
-            },
             patchEventPrototype: function patchEventPrototype() {
               return noop;
             },
@@ -15525,7 +16088,507 @@
         }(typeof window !== 'undefined' && window || typeof self !== 'undefined' && self || global);
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
+         *
+         * Use of this source code is governed by an MIT-style license that can be
+         * found in the LICENSE file at https://angular.io/license
+         */
+
+        /**
+         * Suppress closure compiler errors about unknown 'Zone' variable
+         * @fileoverview
+         * @suppress {undefinedVars,globalThis,missingRequire}
+         */
+        /// <reference types="node"/>
+        // issue #989, to reduce bundle size, use short name
+
+        /** Object.getOwnPropertyDescriptor */
+
+
+        var ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+        /** Object.defineProperty */
+
+        var ObjectDefineProperty = Object.defineProperty;
+        /** Object.getPrototypeOf */
+
+        var ObjectGetPrototypeOf = Object.getPrototypeOf;
+        /** Object.create */
+
+        var ObjectCreate = Object.create;
+        /** Array.prototype.slice */
+
+        var ArraySlice = Array.prototype.slice;
+        /** addEventListener string const */
+
+        var ADD_EVENT_LISTENER_STR = 'addEventListener';
+        /** removeEventListener string const */
+
+        var REMOVE_EVENT_LISTENER_STR = 'removeEventListener';
+        /** zoneSymbol addEventListener */
+
+        var ZONE_SYMBOL_ADD_EVENT_LISTENER = Zone.__symbol__(ADD_EVENT_LISTENER_STR);
+        /** zoneSymbol removeEventListener */
+
+
+        var ZONE_SYMBOL_REMOVE_EVENT_LISTENER = Zone.__symbol__(REMOVE_EVENT_LISTENER_STR);
+        /** true string const */
+
+
+        var TRUE_STR = 'true';
+        /** false string const */
+
+        var FALSE_STR = 'false';
+        /** Zone symbol prefix string const. */
+
+        var ZONE_SYMBOL_PREFIX = Zone.__symbol__('');
+
+        function wrapWithCurrentZone(callback, source) {
+          return Zone.current.wrap(callback, source);
+        }
+
+        function scheduleMacroTaskWithCurrentZone(source, callback, data, customSchedule, customCancel) {
+          return Zone.current.scheduleMacroTask(source, callback, data, customSchedule, customCancel);
+        }
+
+        var zoneSymbol = Zone.__symbol__;
+        var isWindowExists = typeof window !== 'undefined';
+        var internalWindow = isWindowExists ? window : undefined;
+
+        var _global = isWindowExists && internalWindow || typeof self === 'object' && self || global;
+
+        var REMOVE_ATTRIBUTE = 'removeAttribute';
+        var NULL_ON_PROP_VALUE = [null];
+
+        function bindArguments(args, source) {
+          for (var i = args.length - 1; i >= 0; i--) {
+            if (typeof args[i] === 'function') {
+              args[i] = wrapWithCurrentZone(args[i], source + '_' + i);
+            }
+          }
+
+          return args;
+        }
+
+        function patchPrototype(prototype, fnNames) {
+          var source = prototype.constructor['name'];
+
+          var _loop2 = function _loop2(i) {
+            var name = fnNames[i];
+            var delegate = prototype[name];
+
+            if (delegate) {
+              var prototypeDesc = ObjectGetOwnPropertyDescriptor(prototype, name);
+
+              if (!isPropertyWritable(prototypeDesc)) {
+                return "continue";
+              }
+
+              prototype[name] = function (delegate) {
+                var patched = function patched() {
+                  return delegate.apply(this, bindArguments(arguments, source + '.' + name));
+                };
+
+                attachOriginToPatched(patched, delegate);
+                return patched;
+              }(delegate);
+            }
+          };
+
+          for (var i = 0; i < fnNames.length; i++) {
+            var _ret = _loop2(i);
+
+            if (_ret === "continue") continue;
+          }
+        }
+
+        function isPropertyWritable(propertyDesc) {
+          if (!propertyDesc) {
+            return true;
+          }
+
+          if (propertyDesc.writable === false) {
+            return false;
+          }
+
+          return !(typeof propertyDesc.get === 'function' && typeof propertyDesc.set === 'undefined');
+        }
+
+        var isWebWorker = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope; // Make sure to access `process` through `_global` so that WebPack does not accidentally browserify
+        // this code.
+
+        var isNode = !('nw' in _global) && typeof _global.process !== 'undefined' && {}.toString.call(_global.process) === '[object process]';
+        var isBrowser = !isNode && !isWebWorker && !!(isWindowExists && internalWindow['HTMLElement']); // we are in electron of nw, so we are both browser and nodejs
+        // Make sure to access `process` through `_global` so that WebPack does not accidentally browserify
+        // this code.
+
+        var isMix = typeof _global.process !== 'undefined' && {}.toString.call(_global.process) === '[object process]' && !isWebWorker && !!(isWindowExists && internalWindow['HTMLElement']);
+        var zoneSymbolEventNames = {};
+
+        var wrapFn = function wrapFn(event) {
+          // https://github.com/angular/zone.js/issues/911, in IE, sometimes
+          // event will be undefined, so we need to use window.event
+          event = event || _global.event;
+
+          if (!event) {
+            return;
+          }
+
+          var eventNameSymbol = zoneSymbolEventNames[event.type];
+
+          if (!eventNameSymbol) {
+            eventNameSymbol = zoneSymbolEventNames[event.type] = zoneSymbol('ON_PROPERTY' + event.type);
+          }
+
+          var target = this || event.target || _global;
+          var listener = target[eventNameSymbol];
+          var result;
+
+          if (isBrowser && target === internalWindow && event.type === 'error') {
+            // window.onerror have different signiture
+            // https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror#window.onerror
+            // and onerror callback will prevent default when callback return true
+            var errorEvent = event;
+            result = listener && listener.call(this, errorEvent.message, errorEvent.filename, errorEvent.lineno, errorEvent.colno, errorEvent.error);
+
+            if (result === true) {
+              event.preventDefault();
+            }
+          } else {
+            result = listener && listener.apply(this, arguments);
+
+            if (result != undefined && !result) {
+              event.preventDefault();
+            }
+          }
+
+          return result;
+        };
+
+        function patchProperty(obj, prop, prototype) {
+          var desc = ObjectGetOwnPropertyDescriptor(obj, prop);
+
+          if (!desc && prototype) {
+            // when patch window object, use prototype to check prop exist or not
+            var prototypeDesc = ObjectGetOwnPropertyDescriptor(prototype, prop);
+
+            if (prototypeDesc) {
+              desc = {
+                enumerable: true,
+                configurable: true
+              };
+            }
+          } // if the descriptor not exists or is not configurable
+          // just return
+
+
+          if (!desc || !desc.configurable) {
+            return;
+          }
+
+          var onPropPatchedSymbol = zoneSymbol('on' + prop + 'patched');
+
+          if (obj.hasOwnProperty(onPropPatchedSymbol) && obj[onPropPatchedSymbol]) {
+            return;
+          } // A property descriptor cannot have getter/setter and be writable
+          // deleting the writable and value properties avoids this error:
+          //
+          // TypeError: property descriptors must not specify a value or be writable when a
+          // getter or setter has been specified
+
+
+          delete desc.writable;
+          delete desc.value;
+          var originalDescGet = desc.get;
+          var originalDescSet = desc.set; // substr(2) cuz 'onclick' -> 'click', etc
+
+          var eventName = prop.substr(2);
+          var eventNameSymbol = zoneSymbolEventNames[eventName];
+
+          if (!eventNameSymbol) {
+            eventNameSymbol = zoneSymbolEventNames[eventName] = zoneSymbol('ON_PROPERTY' + eventName);
+          }
+
+          desc.set = function (newValue) {
+            // in some of windows's onproperty callback, this is undefined
+            // so we need to check it
+            var target = this;
+
+            if (!target && obj === _global) {
+              target = _global;
+            }
+
+            if (!target) {
+              return;
+            }
+
+            var previousValue = target[eventNameSymbol];
+
+            if (previousValue) {
+              target.removeEventListener(eventName, wrapFn);
+            } // issue #978, when onload handler was added before loading zone.js
+            // we should remove it with originalDescSet
+
+
+            if (originalDescSet) {
+              originalDescSet.apply(target, NULL_ON_PROP_VALUE);
+            }
+
+            if (typeof newValue === 'function') {
+              target[eventNameSymbol] = newValue;
+              target.addEventListener(eventName, wrapFn, false);
+            } else {
+              target[eventNameSymbol] = null;
+            }
+          }; // The getter would return undefined for unassigned properties but the default value of an
+          // unassigned property is null
+
+
+          desc.get = function () {
+            // in some of windows's onproperty callback, this is undefined
+            // so we need to check it
+            var target = this;
+
+            if (!target && obj === _global) {
+              target = _global;
+            }
+
+            if (!target) {
+              return null;
+            }
+
+            var listener = target[eventNameSymbol];
+
+            if (listener) {
+              return listener;
+            } else if (originalDescGet) {
+              // result will be null when use inline event attribute,
+              // such as <button onclick="func();">OK</button>
+              // because the onclick function is internal raw uncompiled handler
+              // the onclick will be evaluated when first time event was triggered or
+              // the property is accessed, https://github.com/angular/zone.js/issues/525
+              // so we should use original native get to retrieve the handler
+              var value = originalDescGet && originalDescGet.call(this);
+
+              if (value) {
+                desc.set.call(this, value);
+
+                if (typeof target[REMOVE_ATTRIBUTE] === 'function') {
+                  target.removeAttribute(prop);
+                }
+
+                return value;
+              }
+            }
+
+            return null;
+          };
+
+          ObjectDefineProperty(obj, prop, desc);
+          obj[onPropPatchedSymbol] = true;
+        }
+
+        function patchOnProperties(obj, properties, prototype) {
+          if (properties) {
+            for (var i = 0; i < properties.length; i++) {
+              patchProperty(obj, 'on' + properties[i], prototype);
+            }
+          } else {
+            var onProperties = [];
+
+            for (var prop in obj) {
+              if (prop.substr(0, 2) == 'on') {
+                onProperties.push(prop);
+              }
+            }
+
+            for (var j = 0; j < onProperties.length; j++) {
+              patchProperty(obj, onProperties[j], prototype);
+            }
+          }
+        }
+
+        var originalInstanceKey = zoneSymbol('originalInstance'); // wrap some native API on `window`
+
+        function patchClass(className) {
+          var OriginalClass = _global[className];
+          if (!OriginalClass) return; // keep original class in global
+
+          _global[zoneSymbol(className)] = OriginalClass;
+
+          _global[className] = function () {
+            var a = bindArguments(arguments, className);
+
+            switch (a.length) {
+              case 0:
+                this[originalInstanceKey] = new OriginalClass();
+                break;
+
+              case 1:
+                this[originalInstanceKey] = new OriginalClass(a[0]);
+                break;
+
+              case 2:
+                this[originalInstanceKey] = new OriginalClass(a[0], a[1]);
+                break;
+
+              case 3:
+                this[originalInstanceKey] = new OriginalClass(a[0], a[1], a[2]);
+                break;
+
+              case 4:
+                this[originalInstanceKey] = new OriginalClass(a[0], a[1], a[2], a[3]);
+                break;
+
+              default:
+                throw new Error('Arg list too long.');
+            }
+          }; // attach original delegate to patched function
+
+
+          attachOriginToPatched(_global[className], OriginalClass);
+          var instance = new OriginalClass(function () {});
+          var prop;
+
+          for (prop in instance) {
+            // https://bugs.webkit.org/show_bug.cgi?id=44721
+            if (className === 'XMLHttpRequest' && prop === 'responseBlob') continue;
+
+            (function (prop) {
+              if (typeof instance[prop] === 'function') {
+                _global[className].prototype[prop] = function () {
+                  return this[originalInstanceKey][prop].apply(this[originalInstanceKey], arguments);
+                };
+              } else {
+                ObjectDefineProperty(_global[className].prototype, prop, {
+                  set: function set(fn) {
+                    if (typeof fn === 'function') {
+                      this[originalInstanceKey][prop] = wrapWithCurrentZone(fn, className + '.' + prop); // keep callback in wrapped function so we can
+                      // use it in Function.prototype.toString to return
+                      // the native one.
+
+                      attachOriginToPatched(this[originalInstanceKey][prop], fn);
+                    } else {
+                      this[originalInstanceKey][prop] = fn;
+                    }
+                  },
+                  get: function get() {
+                    return this[originalInstanceKey][prop];
+                  }
+                });
+              }
+            })(prop);
+          }
+
+          for (prop in OriginalClass) {
+            if (prop !== 'prototype' && OriginalClass.hasOwnProperty(prop)) {
+              _global[className][prop] = OriginalClass[prop];
+            }
+          }
+        }
+
+        function patchMethod(target, name, patchFn) {
+          var proto = target;
+
+          while (proto && !proto.hasOwnProperty(name)) {
+            proto = ObjectGetPrototypeOf(proto);
+          }
+
+          if (!proto && target[name]) {
+            // somehow we did not find it, but we can see it. This happens on IE for Window properties.
+            proto = target;
+          }
+
+          var delegateName = zoneSymbol(name);
+          var delegate = null;
+
+          if (proto && !(delegate = proto[delegateName])) {
+            delegate = proto[delegateName] = proto[name]; // check whether proto[name] is writable
+            // some property is readonly in safari, such as HtmlCanvasElement.prototype.toBlob
+
+            var desc = proto && ObjectGetOwnPropertyDescriptor(proto, name);
+
+            if (isPropertyWritable(desc)) {
+              var patchDelegate = patchFn(delegate, delegateName, name);
+
+              proto[name] = function () {
+                return patchDelegate(this, arguments);
+              };
+
+              attachOriginToPatched(proto[name], delegate);
+            }
+          }
+
+          return delegate;
+        } // TODO: @JiaLiPassion, support cancel task later if necessary
+
+
+        function patchMacroTask(obj, funcName, metaCreator) {
+          var setNative = null;
+
+          function scheduleTask(task) {
+            var data = task.data;
+
+            data.args[data.cbIdx] = function () {
+              task.invoke.apply(this, arguments);
+            };
+
+            setNative.apply(data.target, data.args);
+            return task;
+          }
+
+          setNative = patchMethod(obj, funcName, function (delegate) {
+            return function (self, args) {
+              var meta = metaCreator(self, args);
+
+              if (meta.cbIdx >= 0 && typeof args[meta.cbIdx] === 'function') {
+                return scheduleMacroTaskWithCurrentZone(meta.name, args[meta.cbIdx], meta, scheduleTask);
+              } else {
+                // cause an error by calling it directly.
+                return delegate.apply(self, args);
+              }
+            };
+          });
+        }
+
+        function attachOriginToPatched(patched, original) {
+          patched[zoneSymbol('OriginalDelegate')] = original;
+        }
+
+        var isDetectedIEOrEdge = false;
+        var ieOrEdge = false;
+
+        function isIE() {
+          try {
+            var ua = internalWindow.navigator.userAgent;
+
+            if (ua.indexOf('MSIE ') !== -1 || ua.indexOf('Trident/') !== -1) {
+              return true;
+            }
+          } catch (error) {}
+
+          return false;
+        }
+
+        function isIEOrEdge() {
+          if (isDetectedIEOrEdge) {
+            return ieOrEdge;
+          }
+
+          isDetectedIEOrEdge = true;
+
+          try {
+            var ua = internalWindow.navigator.userAgent;
+
+            if (ua.indexOf('MSIE ') !== -1 || ua.indexOf('Trident/') !== -1 || ua.indexOf('Edge/') !== -1) {
+              ieOrEdge = true;
+            }
+          } catch (error) {}
+
+          return ieOrEdge;
+        }
+        /**
+         * @license
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -15568,7 +16631,7 @@
           };
 
           api.microtaskDrainDone = function () {
-            var _loop = function _loop() {
+            var _loop3 = function _loop3() {
               var uncaughtPromiseError = _uncaughtPromiseErrors.shift();
 
               try {
@@ -15581,7 +16644,7 @@
             };
 
             while (_uncaughtPromiseErrors.length) {
-              _loop();
+              _loop3();
             }
           };
 
@@ -15919,7 +16982,7 @@
                     _step2;
 
                 try {
-                  var _loop2 = function _loop2() {
+                  var _loop4 = function _loop4() {
                     var value = _step2.value;
 
                     if (!isThenable(value)) {
@@ -15957,7 +17020,7 @@
                   };
 
                   for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-                    _loop2();
+                    _loop4();
                   } // Make the unresolvedCount zero-based again.
 
                 } catch (err) {
@@ -16063,54 +17126,6 @@
           ZoneAwarePromise['race'] = ZoneAwarePromise.race;
           ZoneAwarePromise['all'] = ZoneAwarePromise.all;
           var NativePromise = global[symbolPromise] = global['Promise'];
-
-          var ZONE_AWARE_PROMISE = Zone.__symbol__('ZoneAwarePromise');
-
-          var desc = ObjectGetOwnPropertyDescriptor(global, 'Promise');
-
-          if (!desc || desc.configurable) {
-            desc && delete desc.writable;
-            desc && delete desc.value;
-
-            if (!desc) {
-              desc = {
-                configurable: true,
-                enumerable: true
-              };
-            }
-
-            desc.get = function () {
-              // if we already set ZoneAwarePromise, use patched one
-              // otherwise return native one.
-              return global[ZONE_AWARE_PROMISE] ? global[ZONE_AWARE_PROMISE] : global[symbolPromise];
-            };
-
-            desc.set = function (NewNativePromise) {
-              if (NewNativePromise === ZoneAwarePromise) {
-                // if the NewNativePromise is ZoneAwarePromise
-                // save to global
-                global[ZONE_AWARE_PROMISE] = NewNativePromise;
-              } else {
-                // if the NewNativePromise is not ZoneAwarePromise
-                // for example: after load zone.js, some library just
-                // set es6-promise to global, if we set it to global
-                // directly, assertZonePatched will fail and angular
-                // will not loaded, so we just set the NewNativePromise
-                // to global[symbolPromise], so the result is just like
-                // we load ES6 Promise before zone.js
-                global[symbolPromise] = NewNativePromise;
-
-                if (!NewNativePromise.prototype[symbolThen]) {
-                  patchThen(NewNativePromise);
-                }
-
-                api.setNativePromise(NewNativePromise);
-              }
-            };
-
-            ObjectDefineProperty(global, 'Promise', desc);
-          }
-
           global['Promise'] = ZoneAwarePromise;
 
           var symbolThenPatched = __symbol__('thenPatched');
@@ -16144,8 +17159,8 @@
           api.patchThen = patchThen;
 
           function zoneify(fn) {
-            return function () {
-              var resultPromise = fn.apply(this, arguments);
+            return function (self, args) {
+              var resultPromise = fn.apply(self, args);
 
               if (resultPromise instanceof ZoneAwarePromise) {
                 return resultPromise;
@@ -16163,12 +17178,9 @@
 
           if (NativePromise) {
             patchThen(NativePromise);
-            var fetch = global['fetch'];
-
-            if (typeof fetch == 'function') {
-              global[api.symbol('fetch')] = fetch;
-              global['fetch'] = zoneify(fetch);
-            }
+            patchMethod(global, 'fetch', function (delegate) {
+              return zoneify(delegate);
+            });
           } // This is not part of public API, but it is useful for tests, so we expose it.
 
 
@@ -16177,539 +17189,7 @@
         });
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
-         *
-         * Use of this source code is governed by an MIT-style license that can be
-         * found in the LICENSE file at https://angular.io/license
-         */
-
-        /**
-         * Suppress closure compiler errors about unknown 'Zone' variable
-         * @fileoverview
-         * @suppress {undefinedVars,globalThis,missingRequire}
-         */
-        /// <reference types="node"/>
-        // issue #989, to reduce bundle size, use short name
-
-        /** Object.getOwnPropertyDescriptor */
-
-
-        var ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-        /** Object.defineProperty */
-
-        var ObjectDefineProperty = Object.defineProperty;
-        /** Object.getPrototypeOf */
-
-        var ObjectGetPrototypeOf = Object.getPrototypeOf;
-        /** Object.create */
-
-        var ObjectCreate = Object.create;
-        /** Array.prototype.slice */
-
-        var ArraySlice = Array.prototype.slice;
-        /** addEventListener string const */
-
-        var ADD_EVENT_LISTENER_STR = 'addEventListener';
-        /** removeEventListener string const */
-
-        var REMOVE_EVENT_LISTENER_STR = 'removeEventListener';
-        /** zoneSymbol addEventListener */
-
-        var ZONE_SYMBOL_ADD_EVENT_LISTENER = Zone.__symbol__(ADD_EVENT_LISTENER_STR);
-        /** zoneSymbol removeEventListener */
-
-
-        var ZONE_SYMBOL_REMOVE_EVENT_LISTENER = Zone.__symbol__(REMOVE_EVENT_LISTENER_STR);
-        /** true string const */
-
-
-        var TRUE_STR = 'true';
-        /** false string const */
-
-        var FALSE_STR = 'false';
-        /** Zone symbol prefix string const. */
-
-        var ZONE_SYMBOL_PREFIX = Zone.__symbol__('');
-
-        function wrapWithCurrentZone(callback, source) {
-          return Zone.current.wrap(callback, source);
-        }
-
-        function scheduleMacroTaskWithCurrentZone(source, callback, data, customSchedule, customCancel) {
-          return Zone.current.scheduleMacroTask(source, callback, data, customSchedule, customCancel);
-        }
-
-        var zoneSymbol = Zone.__symbol__;
-        var isWindowExists = typeof window !== 'undefined';
-        var internalWindow = isWindowExists ? window : undefined;
-
-        var _global = isWindowExists && internalWindow || typeof self === 'object' && self || global;
-
-        var REMOVE_ATTRIBUTE = 'removeAttribute';
-        var NULL_ON_PROP_VALUE = [null];
-
-        function bindArguments(args, source) {
-          for (var i = args.length - 1; i >= 0; i--) {
-            if (typeof args[i] === 'function') {
-              args[i] = wrapWithCurrentZone(args[i], source + '_' + i);
-            }
-          }
-
-          return args;
-        }
-
-        function patchPrototype(prototype, fnNames) {
-          var source = prototype.constructor['name'];
-
-          var _loop3 = function _loop3(i) {
-            var name = fnNames[i];
-            var delegate = prototype[name];
-
-            if (delegate) {
-              var prototypeDesc = ObjectGetOwnPropertyDescriptor(prototype, name);
-
-              if (!isPropertyWritable(prototypeDesc)) {
-                return "continue";
-              }
-
-              prototype[name] = function (delegate) {
-                var patched = function patched() {
-                  return delegate.apply(this, bindArguments(arguments, source + '.' + name));
-                };
-
-                attachOriginToPatched(patched, delegate);
-                return patched;
-              }(delegate);
-            }
-          };
-
-          for (var i = 0; i < fnNames.length; i++) {
-            var _ret = _loop3(i);
-
-            if (_ret === "continue") continue;
-          }
-        }
-
-        function isPropertyWritable(propertyDesc) {
-          if (!propertyDesc) {
-            return true;
-          }
-
-          if (propertyDesc.writable === false) {
-            return false;
-          }
-
-          return !(typeof propertyDesc.get === 'function' && typeof propertyDesc.set === 'undefined');
-        }
-
-        var isWebWorker = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope; // Make sure to access `process` through `_global` so that WebPack does not accidentally browserify
-        // this code.
-
-        var isNode = !('nw' in _global) && typeof _global.process !== 'undefined' && {}.toString.call(_global.process) === '[object process]';
-        var isBrowser = !isNode && !isWebWorker && !!(isWindowExists && internalWindow['HTMLElement']); // we are in electron of nw, so we are both browser and nodejs
-        // Make sure to access `process` through `_global` so that WebPack does not accidentally browserify
-        // this code.
-
-        var isMix = typeof _global.process !== 'undefined' && {}.toString.call(_global.process) === '[object process]' && !isWebWorker && !!(isWindowExists && internalWindow['HTMLElement']);
-        var zoneSymbolEventNames = {};
-
-        var wrapFn = function wrapFn(event) {
-          // https://github.com/angular/zone.js/issues/911, in IE, sometimes
-          // event will be undefined, so we need to use window.event
-          event = event || _global.event;
-
-          if (!event) {
-            return;
-          }
-
-          var eventNameSymbol = zoneSymbolEventNames[event.type];
-
-          if (!eventNameSymbol) {
-            eventNameSymbol = zoneSymbolEventNames[event.type] = zoneSymbol('ON_PROPERTY' + event.type);
-          }
-
-          var target = this || event.target || _global;
-          var listener = target[eventNameSymbol];
-          var result;
-
-          if (isBrowser && target === internalWindow && event.type === 'error') {
-            // window.onerror have different signiture
-            // https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror#window.onerror
-            // and onerror callback will prevent default when callback return true
-            var errorEvent = event;
-            result = listener && listener.call(this, errorEvent.message, errorEvent.filename, errorEvent.lineno, errorEvent.colno, errorEvent.error);
-
-            if (result === true) {
-              event.preventDefault();
-            }
-          } else {
-            result = listener && listener.apply(this, arguments);
-
-            if (result != undefined && !result) {
-              event.preventDefault();
-            }
-          }
-
-          return result;
-        };
-
-        function patchProperty(obj, prop, prototype) {
-          var desc = ObjectGetOwnPropertyDescriptor(obj, prop);
-
-          if (!desc && prototype) {
-            // when patch window object, use prototype to check prop exist or not
-            var prototypeDesc = ObjectGetOwnPropertyDescriptor(prototype, prop);
-
-            if (prototypeDesc) {
-              desc = {
-                enumerable: true,
-                configurable: true
-              };
-            }
-          } // if the descriptor not exists or is not configurable
-          // just return
-
-
-          if (!desc || !desc.configurable) {
-            return;
-          }
-
-          var onPropPatchedSymbol = zoneSymbol('on' + prop + 'patched');
-
-          if (obj.hasOwnProperty(onPropPatchedSymbol) && obj[onPropPatchedSymbol]) {
-            return;
-          } // A property descriptor cannot have getter/setter and be writable
-          // deleting the writable and value properties avoids this error:
-          //
-          // TypeError: property descriptors must not specify a value or be writable when a
-          // getter or setter has been specified
-
-
-          delete desc.writable;
-          delete desc.value;
-          var originalDescGet = desc.get;
-          var originalDescSet = desc.set; // substr(2) cuz 'onclick' -> 'click', etc
-
-          var eventName = prop.substr(2);
-          var eventNameSymbol = zoneSymbolEventNames[eventName];
-
-          if (!eventNameSymbol) {
-            eventNameSymbol = zoneSymbolEventNames[eventName] = zoneSymbol('ON_PROPERTY' + eventName);
-          }
-
-          desc.set = function (newValue) {
-            // in some of windows's onproperty callback, this is undefined
-            // so we need to check it
-            var target = this;
-
-            if (!target && obj === _global) {
-              target = _global;
-            }
-
-            if (!target) {
-              return;
-            }
-
-            var previousValue = target[eventNameSymbol];
-
-            if (previousValue) {
-              target.removeEventListener(eventName, wrapFn);
-            } // issue #978, when onload handler was added before loading zone.js
-            // we should remove it with originalDescSet
-
-
-            if (originalDescSet) {
-              originalDescSet.apply(target, NULL_ON_PROP_VALUE);
-            }
-
-            if (typeof newValue === 'function') {
-              target[eventNameSymbol] = newValue;
-              target.addEventListener(eventName, wrapFn, false);
-            } else {
-              target[eventNameSymbol] = null;
-            }
-          }; // The getter would return undefined for unassigned properties but the default value of an
-          // unassigned property is null
-
-
-          desc.get = function () {
-            // in some of windows's onproperty callback, this is undefined
-            // so we need to check it
-            var target = this;
-
-            if (!target && obj === _global) {
-              target = _global;
-            }
-
-            if (!target) {
-              return null;
-            }
-
-            var listener = target[eventNameSymbol];
-
-            if (listener) {
-              return listener;
-            } else if (originalDescGet) {
-              // result will be null when use inline event attribute,
-              // such as <button onclick="func();">OK</button>
-              // because the onclick function is internal raw uncompiled handler
-              // the onclick will be evaluated when first time event was triggered or
-              // the property is accessed, https://github.com/angular/zone.js/issues/525
-              // so we should use original native get to retrieve the handler
-              var value = originalDescGet && originalDescGet.call(this);
-
-              if (value) {
-                desc.set.call(this, value);
-
-                if (typeof target[REMOVE_ATTRIBUTE] === 'function') {
-                  target.removeAttribute(prop);
-                }
-
-                return value;
-              }
-            }
-
-            return null;
-          };
-
-          ObjectDefineProperty(obj, prop, desc);
-          obj[onPropPatchedSymbol] = true;
-        }
-
-        function patchOnProperties(obj, properties, prototype) {
-          if (properties) {
-            for (var i = 0; i < properties.length; i++) {
-              patchProperty(obj, 'on' + properties[i], prototype);
-            }
-          } else {
-            var onProperties = [];
-
-            for (var prop in obj) {
-              if (prop.substr(0, 2) == 'on') {
-                onProperties.push(prop);
-              }
-            }
-
-            for (var j = 0; j < onProperties.length; j++) {
-              patchProperty(obj, onProperties[j], prototype);
-            }
-          }
-        }
-
-        var originalInstanceKey = zoneSymbol('originalInstance'); // wrap some native API on `window`
-
-        function patchClass(className) {
-          var OriginalClass = _global[className];
-          if (!OriginalClass) return; // keep original class in global
-
-          _global[zoneSymbol(className)] = OriginalClass;
-
-          _global[className] = function () {
-            var a = bindArguments(arguments, className);
-
-            switch (a.length) {
-              case 0:
-                this[originalInstanceKey] = new OriginalClass();
-                break;
-
-              case 1:
-                this[originalInstanceKey] = new OriginalClass(a[0]);
-                break;
-
-              case 2:
-                this[originalInstanceKey] = new OriginalClass(a[0], a[1]);
-                break;
-
-              case 3:
-                this[originalInstanceKey] = new OriginalClass(a[0], a[1], a[2]);
-                break;
-
-              case 4:
-                this[originalInstanceKey] = new OriginalClass(a[0], a[1], a[2], a[3]);
-                break;
-
-              default:
-                throw new Error('Arg list too long.');
-            }
-          }; // attach original delegate to patched function
-
-
-          attachOriginToPatched(_global[className], OriginalClass);
-          var instance = new OriginalClass(function () {});
-          var prop;
-
-          for (prop in instance) {
-            // https://bugs.webkit.org/show_bug.cgi?id=44721
-            if (className === 'XMLHttpRequest' && prop === 'responseBlob') continue;
-
-            (function (prop) {
-              if (typeof instance[prop] === 'function') {
-                _global[className].prototype[prop] = function () {
-                  return this[originalInstanceKey][prop].apply(this[originalInstanceKey], arguments);
-                };
-              } else {
-                ObjectDefineProperty(_global[className].prototype, prop, {
-                  set: function set(fn) {
-                    if (typeof fn === 'function') {
-                      this[originalInstanceKey][prop] = wrapWithCurrentZone(fn, className + '.' + prop); // keep callback in wrapped function so we can
-                      // use it in Function.prototype.toString to return
-                      // the native one.
-
-                      attachOriginToPatched(this[originalInstanceKey][prop], fn);
-                    } else {
-                      this[originalInstanceKey][prop] = fn;
-                    }
-                  },
-                  get: function get() {
-                    return this[originalInstanceKey][prop];
-                  }
-                });
-              }
-            })(prop);
-          }
-
-          for (prop in OriginalClass) {
-            if (prop !== 'prototype' && OriginalClass.hasOwnProperty(prop)) {
-              _global[className][prop] = OriginalClass[prop];
-            }
-          }
-        }
-
-        function copySymbolProperties(src, dest) {
-          if (typeof Object.getOwnPropertySymbols !== 'function') {
-            return;
-          }
-
-          var symbols = Object.getOwnPropertySymbols(src);
-          symbols.forEach(function (symbol) {
-            var desc = Object.getOwnPropertyDescriptor(src, symbol);
-            Object.defineProperty(dest, symbol, {
-              get: function get() {
-                return src[symbol];
-              },
-              set: function set(value) {
-                if (desc && (!desc.writable || typeof desc.set !== 'function')) {
-                  // if src[symbol] is not writable or not have a setter, just return
-                  return;
-                }
-
-                src[symbol] = value;
-              },
-              enumerable: desc ? desc.enumerable : true,
-              configurable: desc ? desc.configurable : true
-            });
-          });
-        }
-
-        var shouldCopySymbolProperties = false;
-
-        function patchMethod(target, name, patchFn) {
-          var proto = target;
-
-          while (proto && !proto.hasOwnProperty(name)) {
-            proto = ObjectGetPrototypeOf(proto);
-          }
-
-          if (!proto && target[name]) {
-            // somehow we did not find it, but we can see it. This happens on IE for Window properties.
-            proto = target;
-          }
-
-          var delegateName = zoneSymbol(name);
-          var delegate = null;
-
-          if (proto && !(delegate = proto[delegateName])) {
-            delegate = proto[delegateName] = proto[name]; // check whether proto[name] is writable
-            // some property is readonly in safari, such as HtmlCanvasElement.prototype.toBlob
-
-            var desc = proto && ObjectGetOwnPropertyDescriptor(proto, name);
-
-            if (isPropertyWritable(desc)) {
-              var patchDelegate = patchFn(delegate, delegateName, name);
-
-              proto[name] = function () {
-                return patchDelegate(this, arguments);
-              };
-
-              attachOriginToPatched(proto[name], delegate);
-
-              if (shouldCopySymbolProperties) {
-                copySymbolProperties(delegate, proto[name]);
-              }
-            }
-          }
-
-          return delegate;
-        } // TODO: @JiaLiPassion, support cancel task later if necessary
-
-
-        function patchMacroTask(obj, funcName, metaCreator) {
-          var setNative = null;
-
-          function scheduleTask(task) {
-            var data = task.data;
-
-            data.args[data.cbIdx] = function () {
-              task.invoke.apply(this, arguments);
-            };
-
-            setNative.apply(data.target, data.args);
-            return task;
-          }
-
-          setNative = patchMethod(obj, funcName, function (delegate) {
-            return function (self, args) {
-              var meta = metaCreator(self, args);
-
-              if (meta.cbIdx >= 0 && typeof args[meta.cbIdx] === 'function') {
-                return scheduleMacroTaskWithCurrentZone(meta.name, args[meta.cbIdx], meta, scheduleTask);
-              } else {
-                // cause an error by calling it directly.
-                return delegate.apply(self, args);
-              }
-            };
-          });
-        }
-
-        function attachOriginToPatched(patched, original) {
-          patched[zoneSymbol('OriginalDelegate')] = original;
-        }
-
-        var isDetectedIEOrEdge = false;
-        var ieOrEdge = false;
-
-        function isIE() {
-          try {
-            var ua = internalWindow.navigator.userAgent;
-
-            if (ua.indexOf('MSIE ') !== -1 || ua.indexOf('Trident/') !== -1) {
-              return true;
-            }
-          } catch (error) {}
-
-          return false;
-        }
-
-        function isIEOrEdge() {
-          if (isDetectedIEOrEdge) {
-            return ieOrEdge;
-          }
-
-          isDetectedIEOrEdge = true;
-
-          try {
-            var ua = internalWindow.navigator.userAgent;
-
-            if (ua.indexOf('MSIE ') !== -1 || ua.indexOf('Trident/') !== -1 || ua.indexOf('Edge/') !== -1) {
-              ieOrEdge = true;
-            }
-          } catch (error) {}
-
-          return ieOrEdge;
-        }
-        /**
-         * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -16773,7 +17253,7 @@
         });
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -17182,8 +17662,8 @@
                   isExisting = true;
 
                   if (checkDuplicate) {
-                    for (var _i = 0; _i < existingTasks.length; _i++) {
-                      if (compare(existingTasks[_i], delegate)) {
+                    for (var _i3 = 0; _i3 < existingTasks.length; _i3++) {
+                      if (compare(existingTasks[_i3], delegate)) {
                         // same callback, same capture, same event name, just return
                         return;
                       }
@@ -17402,8 +17882,8 @@
                   if (tasks) {
                     var removeTasks = tasks.slice();
 
-                    for (var _i2 = 0; _i2 < removeTasks.length; _i2++) {
-                      var task = removeTasks[_i2];
+                    for (var _i4 = 0; _i4 < removeTasks.length; _i4++) {
+                      var task = removeTasks[_i4];
                       var delegate = task.originalDelegate ? task.originalDelegate : task.callback;
                       this[REMOVE_EVENT_LISTENER].call(this, eventName, delegate, task.options);
                     }
@@ -17412,8 +17892,8 @@
                   if (captureTasks) {
                     var _removeTasks = captureTasks.slice();
 
-                    for (var _i3 = 0; _i3 < _removeTasks.length; _i3++) {
-                      var _task = _removeTasks[_i3];
+                    for (var _i5 = 0; _i5 < _removeTasks.length; _i5++) {
+                      var _task = _removeTasks[_i5];
 
                       var _delegate2 = _task.originalDelegate ? _task.originalDelegate : _task.callback;
 
@@ -17508,7 +17988,7 @@
         }
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -17553,7 +18033,7 @@
         }
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -17623,7 +18103,7 @@
 
           if (isBrowser) {
             var _internalWindow = window;
-            var ignoreErrorProperties = isIE ? [{
+            var ignoreErrorProperties = isIE() ? [{
               target: _internalWindow,
               ignoreProperties: ['error']
             }] : []; // in IE/Edge, onProp not exist in window object, but in WindowPrototype
@@ -17684,7 +18164,7 @@
         }
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -17746,7 +18226,7 @@
         });
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -17792,7 +18272,7 @@
           }
 
           function clearTask(task) {
-            return clearNative(task.data.handleId);
+            return clearNative.call(window, task.data.handleId);
           }
 
           setNative = patchMethod(window, setName, function (delegate) {
@@ -17877,7 +18357,7 @@
         }
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -17885,9 +18365,9 @@
 
 
         function patchCustomElements(_global, api) {
-          var _api$getGlobalObjects = api.getGlobalObjects(),
-              isBrowser = _api$getGlobalObjects.isBrowser,
-              isMix = _api$getGlobalObjects.isMix;
+          var _api$getGlobalObjects7 = api.getGlobalObjects(),
+              isBrowser = _api$getGlobalObjects7.isBrowser,
+              isMix = _api$getGlobalObjects7.isMix;
 
           if (!isBrowser && !isMix || !_global['customElements'] || !('customElements' in _global)) {
             return;
@@ -17898,7 +18378,7 @@
         }
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -17911,12 +18391,12 @@
             return;
           }
 
-          var _api$getGlobalObjects2 = api.getGlobalObjects(),
-              eventNames = _api$getGlobalObjects2.eventNames,
-              zoneSymbolEventNames = _api$getGlobalObjects2.zoneSymbolEventNames,
-              TRUE_STR = _api$getGlobalObjects2.TRUE_STR,
-              FALSE_STR = _api$getGlobalObjects2.FALSE_STR,
-              ZONE_SYMBOL_PREFIX = _api$getGlobalObjects2.ZONE_SYMBOL_PREFIX; //  predefine all __zone_symbol__ + eventName + true/false string
+          var _api$getGlobalObjects8 = api.getGlobalObjects(),
+              eventNames = _api$getGlobalObjects8.eventNames,
+              zoneSymbolEventNames = _api$getGlobalObjects8.zoneSymbolEventNames,
+              TRUE_STR = _api$getGlobalObjects8.TRUE_STR,
+              FALSE_STR = _api$getGlobalObjects8.FALSE_STR,
+              ZONE_SYMBOL_PREFIX = _api$getGlobalObjects8.ZONE_SYMBOL_PREFIX; //  predefine all __zone_symbol__ + eventName + true/false string
 
 
           for (var i = 0; i < eventNames.length; i++) {
@@ -17945,7 +18425,7 @@
         }
         /**
          * @license
-         * Copyright Google Inc. All Rights Reserved.
+         * Copyright Google LLC All Rights Reserved.
          *
          * Use of this source code is governed by an MIT-style license that can be
          * found in the LICENSE file at https://angular.io/license
@@ -17996,10 +18476,18 @@
           if (XMLHttpRequestEventTarget && XMLHttpRequestEventTarget.prototype) {
             api.patchEventTarget(global, [XMLHttpRequestEventTarget.prototype]);
           }
+        });
 
+        Zone.__load_patch('MutationObserver', function (global, Zone, api) {
           patchClass('MutationObserver');
           patchClass('WebKitMutationObserver');
+        });
+
+        Zone.__load_patch('IntersectionObserver', function (global, Zone, api) {
           patchClass('IntersectionObserver');
+        });
+
+        Zone.__load_patch('FileReader', function (global, Zone, api) {
           patchClass('FileReader');
         });
 
@@ -18236,570 +18724,6 @@
     },
 
     /***/
-    "./node_modules/zone.js/dist/zone-legacy.js":
-    /*!**************************************************!*\
-      !*** ./node_modules/zone.js/dist/zone-legacy.js ***!
-      \**************************************************/
-
-    /*! no static exports found */
-
-    /***/
-    function node_modulesZoneJsDistZoneLegacyJs(module, exports, __webpack_require__) {
-      var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
-      /**
-      * @license Angular v9.1.0-next.4+61.sha-e552591.with-local-changes
-      * (c) 2010-2020 Google LLC. https://angular.io/
-      * License: MIT
-      */
-
-
-      (function (factory) {
-        true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? __WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module) : __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : undefined;
-      })(function () {
-        'use strict';
-        /**
-         * @license
-         * Copyright Google Inc. All Rights Reserved.
-         *
-         * Use of this source code is governed by an MIT-style license that can be
-         * found in the LICENSE file at https://angular.io/license
-         */
-
-        /*
-         * This is necessary for Chrome and Chrome mobile, to enable
-         * things like redefining `createdCallback` on an element.
-         */
-
-        var zoneSymbol;
-
-        var _defineProperty;
-
-        var _getOwnPropertyDescriptor;
-
-        var _create;
-
-        var unconfigurablesKey;
-
-        function propertyPatch() {
-          zoneSymbol = Zone.__symbol__;
-          _defineProperty = Object[zoneSymbol('defineProperty')] = Object.defineProperty;
-          _getOwnPropertyDescriptor = Object[zoneSymbol('getOwnPropertyDescriptor')] = Object.getOwnPropertyDescriptor;
-          _create = Object.create;
-          unconfigurablesKey = zoneSymbol('unconfigurables');
-
-          Object.defineProperty = function (obj, prop, desc) {
-            if (isUnconfigurable(obj, prop)) {
-              throw new TypeError('Cannot assign to read only property \'' + prop + '\' of ' + obj);
-            }
-
-            var originalConfigurableFlag = desc.configurable;
-
-            if (prop !== 'prototype') {
-              desc = rewriteDescriptor(obj, prop, desc);
-            }
-
-            return _tryDefineProperty(obj, prop, desc, originalConfigurableFlag);
-          };
-
-          Object.defineProperties = function (obj, props) {
-            Object.keys(props).forEach(function (prop) {
-              Object.defineProperty(obj, prop, props[prop]);
-            });
-            return obj;
-          };
-
-          Object.create = function (obj, proto) {
-            if (typeof proto === 'object' && !Object.isFrozen(proto)) {
-              Object.keys(proto).forEach(function (prop) {
-                proto[prop] = rewriteDescriptor(obj, prop, proto[prop]);
-              });
-            }
-
-            return _create(obj, proto);
-          };
-
-          Object.getOwnPropertyDescriptor = function (obj, prop) {
-            var desc = _getOwnPropertyDescriptor(obj, prop);
-
-            if (desc && isUnconfigurable(obj, prop)) {
-              desc.configurable = false;
-            }
-
-            return desc;
-          };
-        }
-
-        function _redefineProperty(obj, prop, desc) {
-          var originalConfigurableFlag = desc.configurable;
-          desc = rewriteDescriptor(obj, prop, desc);
-          return _tryDefineProperty(obj, prop, desc, originalConfigurableFlag);
-        }
-
-        function isUnconfigurable(obj, prop) {
-          return obj && obj[unconfigurablesKey] && obj[unconfigurablesKey][prop];
-        }
-
-        function rewriteDescriptor(obj, prop, desc) {
-          // issue-927, if the desc is frozen, don't try to change the desc
-          if (!Object.isFrozen(desc)) {
-            desc.configurable = true;
-          }
-
-          if (!desc.configurable) {
-            // issue-927, if the obj is frozen, don't try to set the desc to obj
-            if (!obj[unconfigurablesKey] && !Object.isFrozen(obj)) {
-              _defineProperty(obj, unconfigurablesKey, {
-                writable: true,
-                value: {}
-              });
-            }
-
-            if (obj[unconfigurablesKey]) {
-              obj[unconfigurablesKey][prop] = true;
-            }
-          }
-
-          return desc;
-        }
-
-        function _tryDefineProperty(obj, prop, desc, originalConfigurableFlag) {
-          try {
-            return _defineProperty(obj, prop, desc);
-          } catch (error) {
-            if (desc.configurable) {
-              // In case of errors, when the configurable flag was likely set by rewriteDescriptor(), let's
-              // retry with the original flag value
-              if (typeof originalConfigurableFlag == 'undefined') {
-                delete desc.configurable;
-              } else {
-                desc.configurable = originalConfigurableFlag;
-              }
-
-              try {
-                return _defineProperty(obj, prop, desc);
-              } catch (error) {
-                var descJson = null;
-
-                try {
-                  descJson = JSON.stringify(desc);
-                } catch (error) {
-                  descJson = desc.toString();
-                }
-
-                console.log("Attempting to configure '" + prop + "' with descriptor '" + descJson + "' on object '" + obj + "' and got error, giving up: " + error);
-              }
-            } else {
-              throw error;
-            }
-          }
-        }
-        /**
-         * @license
-         * Copyright Google Inc. All Rights Reserved.
-         *
-         * Use of this source code is governed by an MIT-style license that can be
-         * found in the LICENSE file at https://angular.io/license
-         */
-
-
-        function eventTargetLegacyPatch(_global, api) {
-          var _a = api.getGlobalObjects(),
-              eventNames = _a.eventNames,
-              globalSources = _a.globalSources,
-              zoneSymbolEventNames = _a.zoneSymbolEventNames,
-              TRUE_STR = _a.TRUE_STR,
-              FALSE_STR = _a.FALSE_STR,
-              ZONE_SYMBOL_PREFIX = _a.ZONE_SYMBOL_PREFIX;
-
-          var WTF_ISSUE_555 = 'Anchor,Area,Audio,BR,Base,BaseFont,Body,Button,Canvas,Content,DList,Directory,Div,Embed,FieldSet,Font,Form,Frame,FrameSet,HR,Head,Heading,Html,IFrame,Image,Input,Keygen,LI,Label,Legend,Link,Map,Marquee,Media,Menu,Meta,Meter,Mod,OList,Object,OptGroup,Option,Output,Paragraph,Pre,Progress,Quote,Script,Select,Source,Span,Style,TableCaption,TableCell,TableCol,Table,TableRow,TableSection,TextArea,Title,Track,UList,Unknown,Video';
-          var NO_EVENT_TARGET = 'ApplicationCache,EventSource,FileReader,InputMethodContext,MediaController,MessagePort,Node,Performance,SVGElementInstance,SharedWorker,TextTrack,TextTrackCue,TextTrackList,WebKitNamedFlow,Window,Worker,WorkerGlobalScope,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload,IDBRequest,IDBOpenDBRequest,IDBDatabase,IDBTransaction,IDBCursor,DBIndex,WebSocket'.split(',');
-          var EVENT_TARGET = 'EventTarget';
-          var apis = [];
-          var isWtf = _global['wtf'];
-          var WTF_ISSUE_555_ARRAY = WTF_ISSUE_555.split(',');
-
-          if (isWtf) {
-            // Workaround for: https://github.com/google/tracing-framework/issues/555
-            apis = WTF_ISSUE_555_ARRAY.map(function (v) {
-              return 'HTML' + v + 'Element';
-            }).concat(NO_EVENT_TARGET);
-          } else if (_global[EVENT_TARGET]) {
-            apis.push(EVENT_TARGET);
-          } else {
-            // Note: EventTarget is not available in all browsers,
-            // if it's not available, we instead patch the APIs in the IDL that inherit from EventTarget
-            apis = NO_EVENT_TARGET;
-          }
-
-          var isDisableIECheck = _global['__Zone_disable_IE_check'] || false;
-          var isEnableCrossContextCheck = _global['__Zone_enable_cross_context_check'] || false;
-          var ieOrEdge = api.isIEOrEdge();
-          var ADD_EVENT_LISTENER_SOURCE = '.addEventListener:';
-          var FUNCTION_WRAPPER = '[object FunctionWrapper]';
-          var BROWSER_TOOLS = 'function __BROWSERTOOLS_CONSOLE_SAFEFUNC() { [native code] }';
-          var pointerEventsMap = {
-            'MSPointerCancel': 'pointercancel',
-            'MSPointerDown': 'pointerdown',
-            'MSPointerEnter': 'pointerenter',
-            'MSPointerHover': 'pointerhover',
-            'MSPointerLeave': 'pointerleave',
-            'MSPointerMove': 'pointermove',
-            'MSPointerOut': 'pointerout',
-            'MSPointerOver': 'pointerover',
-            'MSPointerUp': 'pointerup'
-          }; //  predefine all __zone_symbol__ + eventName + true/false string
-
-          for (var i = 0; i < eventNames.length; i++) {
-            var eventName = eventNames[i];
-            var falseEventName = eventName + FALSE_STR;
-            var trueEventName = eventName + TRUE_STR;
-            var symbol = ZONE_SYMBOL_PREFIX + falseEventName;
-            var symbolCapture = ZONE_SYMBOL_PREFIX + trueEventName;
-            zoneSymbolEventNames[eventName] = {};
-            zoneSymbolEventNames[eventName][FALSE_STR] = symbol;
-            zoneSymbolEventNames[eventName][TRUE_STR] = symbolCapture;
-          } //  predefine all task.source string
-
-
-          for (var i = 0; i < WTF_ISSUE_555_ARRAY.length; i++) {
-            var target = WTF_ISSUE_555_ARRAY[i];
-            var targets = globalSources[target] = {};
-
-            for (var j = 0; j < eventNames.length; j++) {
-              var eventName = eventNames[j];
-              targets[eventName] = target + ADD_EVENT_LISTENER_SOURCE + eventName;
-            }
-          }
-
-          var checkIEAndCrossContext = function checkIEAndCrossContext(nativeDelegate, delegate, target, args) {
-            if (!isDisableIECheck && ieOrEdge) {
-              if (isEnableCrossContextCheck) {
-                try {
-                  var testString = delegate.toString();
-
-                  if (testString === FUNCTION_WRAPPER || testString == BROWSER_TOOLS) {
-                    nativeDelegate.apply(target, args);
-                    return false;
-                  }
-                } catch (error) {
-                  nativeDelegate.apply(target, args);
-                  return false;
-                }
-              } else {
-                var testString = delegate.toString();
-
-                if (testString === FUNCTION_WRAPPER || testString == BROWSER_TOOLS) {
-                  nativeDelegate.apply(target, args);
-                  return false;
-                }
-              }
-            } else if (isEnableCrossContextCheck) {
-              try {
-                delegate.toString();
-              } catch (error) {
-                nativeDelegate.apply(target, args);
-                return false;
-              }
-            }
-
-            return true;
-          };
-
-          var apiTypes = [];
-
-          for (var i = 0; i < apis.length; i++) {
-            var type = _global[apis[i]];
-            apiTypes.push(type && type.prototype);
-          } // vh is validateHandler to check event handler
-          // is valid or not(for security check)
-
-
-          api.patchEventTarget(_global, apiTypes, {
-            vh: checkIEAndCrossContext,
-            transferEventName: function transferEventName(eventName) {
-              var pointerEventName = pointerEventsMap[eventName];
-              return pointerEventName || eventName;
-            }
-          });
-          Zone[api.symbol('patchEventTarget')] = !!_global[EVENT_TARGET];
-          return true;
-        }
-        /**
-         * @license
-         * Copyright Google Inc. All Rights Reserved.
-         *
-         * Use of this source code is governed by an MIT-style license that can be
-         * found in the LICENSE file at https://angular.io/license
-         */
-        // we have to patch the instance since the proto is non-configurable
-
-
-        function apply(api, _global) {
-          var _a = api.getGlobalObjects(),
-              ADD_EVENT_LISTENER_STR = _a.ADD_EVENT_LISTENER_STR,
-              REMOVE_EVENT_LISTENER_STR = _a.REMOVE_EVENT_LISTENER_STR;
-
-          var WS = _global.WebSocket; // On Safari window.EventTarget doesn't exist so need to patch WS add/removeEventListener
-          // On older Chrome, no need since EventTarget was already patched
-
-          if (!_global.EventTarget) {
-            api.patchEventTarget(_global, [WS.prototype]);
-          }
-
-          _global.WebSocket = function (x, y) {
-            var socket = arguments.length > 1 ? new WS(x, y) : new WS(x);
-            var proxySocket;
-            var proxySocketProto; // Safari 7.0 has non-configurable own 'onmessage' and friends properties on the socket instance
-
-            var onmessageDesc = api.ObjectGetOwnPropertyDescriptor(socket, 'onmessage');
-
-            if (onmessageDesc && onmessageDesc.configurable === false) {
-              proxySocket = api.ObjectCreate(socket); // socket have own property descriptor 'onopen', 'onmessage', 'onclose', 'onerror'
-              // but proxySocket not, so we will keep socket as prototype and pass it to
-              // patchOnProperties method
-
-              proxySocketProto = socket;
-              [ADD_EVENT_LISTENER_STR, REMOVE_EVENT_LISTENER_STR, 'send', 'close'].forEach(function (propName) {
-                proxySocket[propName] = function () {
-                  var args = api.ArraySlice.call(arguments);
-
-                  if (propName === ADD_EVENT_LISTENER_STR || propName === REMOVE_EVENT_LISTENER_STR) {
-                    var eventName = args.length > 0 ? args[0] : undefined;
-
-                    if (eventName) {
-                      var propertySymbol = Zone.__symbol__('ON_PROPERTY' + eventName);
-
-                      socket[propertySymbol] = proxySocket[propertySymbol];
-                    }
-                  }
-
-                  return socket[propName].apply(socket, args);
-                };
-              });
-            } else {
-              // we can patch the real socket
-              proxySocket = socket;
-            }
-
-            api.patchOnProperties(proxySocket, ['close', 'error', 'message', 'open'], proxySocketProto);
-            return proxySocket;
-          };
-
-          var globalWebSocket = _global['WebSocket'];
-
-          for (var prop in WS) {
-            globalWebSocket[prop] = WS[prop];
-          }
-        }
-        /**
-         * @license
-         * Copyright Google Inc. All Rights Reserved.
-         *
-         * Use of this source code is governed by an MIT-style license that can be
-         * found in the LICENSE file at https://angular.io/license
-         */
-
-
-        function propertyDescriptorLegacyPatch(api, _global) {
-          var _a = api.getGlobalObjects(),
-              isNode = _a.isNode,
-              isMix = _a.isMix;
-
-          if (isNode && !isMix) {
-            return;
-          }
-
-          if (!canPatchViaPropertyDescriptor(api, _global)) {
-            var supportsWebSocket = typeof WebSocket !== 'undefined'; // Safari, Android browsers (Jelly Bean)
-
-            patchViaCapturingAllTheEvents(api);
-            api.patchClass('XMLHttpRequest');
-
-            if (supportsWebSocket) {
-              apply(api, _global);
-            }
-
-            Zone[api.symbol('patchEvents')] = true;
-          }
-        }
-
-        function canPatchViaPropertyDescriptor(api, _global) {
-          var _a = api.getGlobalObjects(),
-              isBrowser = _a.isBrowser,
-              isMix = _a.isMix;
-
-          if ((isBrowser || isMix) && !api.ObjectGetOwnPropertyDescriptor(HTMLElement.prototype, 'onclick') && typeof Element !== 'undefined') {
-            // WebKit https://bugs.webkit.org/show_bug.cgi?id=134364
-            // IDL interface attributes are not configurable
-            var desc = api.ObjectGetOwnPropertyDescriptor(Element.prototype, 'onclick');
-            if (desc && !desc.configurable) return false; // try to use onclick to detect whether we can patch via propertyDescriptor
-            // because XMLHttpRequest is not available in service worker
-
-            if (desc) {
-              api.ObjectDefineProperty(Element.prototype, 'onclick', {
-                enumerable: true,
-                configurable: true,
-                get: function get() {
-                  return true;
-                }
-              });
-              var div = document.createElement('div');
-              var result = !!div.onclick;
-              api.ObjectDefineProperty(Element.prototype, 'onclick', desc);
-              return result;
-            }
-          }
-
-          var XMLHttpRequest = _global['XMLHttpRequest'];
-
-          if (!XMLHttpRequest) {
-            // XMLHttpRequest is not available in service worker
-            return false;
-          }
-
-          var ON_READY_STATE_CHANGE = 'onreadystatechange';
-          var XMLHttpRequestPrototype = XMLHttpRequest.prototype;
-          var xhrDesc = api.ObjectGetOwnPropertyDescriptor(XMLHttpRequestPrototype, ON_READY_STATE_CHANGE); // add enumerable and configurable here because in opera
-          // by default XMLHttpRequest.prototype.onreadystatechange is undefined
-          // without adding enumerable and configurable will cause onreadystatechange
-          // non-configurable
-          // and if XMLHttpRequest.prototype.onreadystatechange is undefined,
-          // we should set a real desc instead a fake one
-
-          if (xhrDesc) {
-            api.ObjectDefineProperty(XMLHttpRequestPrototype, ON_READY_STATE_CHANGE, {
-              enumerable: true,
-              configurable: true,
-              get: function get() {
-                return true;
-              }
-            });
-            var req = new XMLHttpRequest();
-            var result = !!req.onreadystatechange; // restore original desc
-
-            api.ObjectDefineProperty(XMLHttpRequestPrototype, ON_READY_STATE_CHANGE, xhrDesc || {});
-            return result;
-          } else {
-            var SYMBOL_FAKE_ONREADYSTATECHANGE_1 = api.symbol('fake');
-            api.ObjectDefineProperty(XMLHttpRequestPrototype, ON_READY_STATE_CHANGE, {
-              enumerable: true,
-              configurable: true,
-              get: function get() {
-                return this[SYMBOL_FAKE_ONREADYSTATECHANGE_1];
-              },
-              set: function set(value) {
-                this[SYMBOL_FAKE_ONREADYSTATECHANGE_1] = value;
-              }
-            });
-            var req = new XMLHttpRequest();
-
-            var detectFunc = function detectFunc() {};
-
-            req.onreadystatechange = detectFunc;
-            var result = req[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === detectFunc;
-            req.onreadystatechange = null;
-            return result;
-          }
-        } // Whenever any eventListener fires, we check the eventListener target and all parents
-        // for `onwhatever` properties and replace them with zone-bound functions
-        // - Chrome (for now)
-
-
-        function patchViaCapturingAllTheEvents(api) {
-          var eventNames = api.getGlobalObjects().eventNames;
-          var unboundKey = api.symbol('unbound');
-
-          var _loop_1 = function _loop_1(i) {
-            var property = eventNames[i];
-            var onproperty = 'on' + property;
-            self.addEventListener(property, function (event) {
-              var elt = event.target,
-                  bound,
-                  source;
-
-              if (elt) {
-                source = elt.constructor['name'] + '.' + onproperty;
-              } else {
-                source = 'unknown.' + onproperty;
-              }
-
-              while (elt) {
-                if (elt[onproperty] && !elt[onproperty][unboundKey]) {
-                  bound = api.wrapWithCurrentZone(elt[onproperty], source);
-                  bound[unboundKey] = elt[onproperty];
-                  elt[onproperty] = bound;
-                }
-
-                elt = elt.parentElement;
-              }
-            }, true);
-          };
-
-          for (var i = 0; i < eventNames.length; i++) {
-            _loop_1(i);
-          }
-        }
-        /**
-         * @license
-         * Copyright Google Inc. All Rights Reserved.
-         *
-         * Use of this source code is governed by an MIT-style license that can be
-         * found in the LICENSE file at https://angular.io/license
-         */
-
-
-        function registerElementPatch(_global, api) {
-          var _a = api.getGlobalObjects(),
-              isBrowser = _a.isBrowser,
-              isMix = _a.isMix;
-
-          if (!isBrowser && !isMix || !('registerElement' in _global.document)) {
-            return;
-          }
-
-          var callbacks = ['createdCallback', 'attachedCallback', 'detachedCallback', 'attributeChangedCallback'];
-          api.patchCallbacks(api, document, 'Document', 'registerElement', callbacks);
-        }
-        /**
-         * @license
-         * Copyright Google Inc. All Rights Reserved.
-         *
-         * Use of this source code is governed by an MIT-style license that can be
-         * found in the LICENSE file at https://angular.io/license
-         */
-
-
-        (function (_global) {
-          var symbolPrefix = _global['__Zone_symbol_prefix'] || '__zone_symbol__';
-
-          function __symbol__(name) {
-            return symbolPrefix + name;
-          }
-
-          _global[__symbol__('legacyPatch')] = function () {
-            var Zone = _global['Zone'];
-
-            Zone.__load_patch('defineProperty', function (global, Zone, api) {
-              api._redefineProperty = _redefineProperty;
-              propertyPatch();
-            });
-
-            Zone.__load_patch('registerElement', function (global, Zone, api) {
-              registerElementPatch(global, api);
-            });
-
-            Zone.__load_patch('EventTargetLegacy', function (global, Zone, api) {
-              eventTargetLegacyPatch(global, api);
-              propertyDescriptorLegacyPatch(api, global);
-            });
-          };
-        })(typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {});
-      });
-      /***/
-
-    },
-
-    /***/
     "./src/polyfills.ts":
     /*!**************************!*\
       !*** ./src/polyfills.ts ***!
@@ -18817,7 +18741,7 @@
 
       var zone_js_dist_zone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
       /*! zone.js/dist/zone */
-      "./node_modules/zone.js/dist/zone-evergreen.js");
+      "./node_modules/zone.js/fesm2015/zone.js");
       /* harmony import */
 
 
@@ -18905,7 +18829,7 @@
 
       __webpack_require__(
       /*! zone.js/dist/zone-legacy */
-      "./node_modules/zone.js/dist/zone-legacy.js");
+      "./node_modules/zone.js/fesm2015/zone-legacy.js");
 
       module.exports = __webpack_require__(
       /*! /home/runner/work/ar.bitrary.dev/ar.bitrary.dev/src/polyfills.ts */
