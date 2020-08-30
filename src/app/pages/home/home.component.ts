@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +9,9 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private title : Title) { 
+    this.title.setTitle('arbitrary - home');
+  }
 
   ngOnInit(): void {
   }

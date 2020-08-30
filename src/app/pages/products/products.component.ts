@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 interface Product {
   name : string,    // product name
@@ -7,6 +8,7 @@ interface Product {
   repoURL : string, // repository URL
   prodURL : string, // production URL (if applicable)
   license : string, // license (if applicable)
+  font    : string, // font for title (if applicable)
 }
 @Component({
   selector: 'app-products',
@@ -19,7 +21,9 @@ export class ProductsComponent implements OnInit {
   productionProds : Product[];
   devProds : Product[]; 
 
-  constructor() { }
+  constructor(private title : Title) { 
+    this.title.setTitle('arbitrary - products');
+  }
 
   ngOnInit(): void {
     this.productionProds = [
@@ -31,7 +35,8 @@ export class ProductsComponent implements OnInit {
         logoURL : null,
         repoURL : 'https://github.com/arbitrarydot/testube',
         prodURL : 'https://testube.app',
-        license : 'GPL-3.0'
+        license : 'GPL-3.0',
+        font    : 'Cairo',
       }
     ]
 
@@ -43,6 +48,7 @@ export class ProductsComponent implements OnInit {
         repoURL : 'https://github.com/arbitrarydot/copilot',
         prodURL : null,
         license : null,
+        font    : 'ABeeZee', 
       },
       {
         name: 'testla',
@@ -51,6 +57,7 @@ export class ProductsComponent implements OnInit {
         repoURL : 'https://github.com/arbitrarydot/testla',
         prodURL : null,
         license : null,
+        font    : null,
       },
       {
         name: 'tsla',
@@ -59,6 +66,7 @@ export class ProductsComponent implements OnInit {
         repoURL : 'https://github.com/arbitrarydot/tsla',
         prodURL : null,
         license : null,
+        font    : null,
       },
 
     ]

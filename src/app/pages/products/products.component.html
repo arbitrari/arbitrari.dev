@@ -4,7 +4,7 @@
 <h2>in production</h2>
 <mat-card class="product-card" *ngFor="let prod of productionProds">
   <mat-card-header>
-    <mat-card-title>
+    <mat-card-title [style.font-family]="prod.font ? prod.font : 'inherit'">
       {{prod.name}}
     </mat-card-title>
     <!-- <mat-card-subtitle>
@@ -30,7 +30,7 @@
 <h2>in development</h2>
 <mat-card class="product-card" *ngFor="let prod of devProds">
   <mat-card-header>
-    <mat-card-title>
+    <mat-card-title [style.font-family]="prod.font ? prod.font : 'inherit'">
       {{prod.name}}
     </mat-card-title>
   </mat-card-header>
