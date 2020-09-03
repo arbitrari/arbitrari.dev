@@ -5,9 +5,9 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar color="primary">arbitrary</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item [routerLink]="['/']" (click)="drawer.close()" routerLinkActive="active-route" [routerLinkActiveOptions]="{exact: true}">home</a>
-      <a mat-list-item [routerLink]="['products']" (click)="drawer.close()" routerLinkActive="active-route">products</a>
-      <a mat-list-item [routerLink]="['about']" (click)="drawer.close()" routerLinkActive="active-route">about</a>
+      <a mat-list-item [routerLink]="['/']" (click)="handleDrawerClick(drawer)" routerLinkActive="active-route" [routerLinkActiveOptions]="{exact: true}">home</a>
+      <a mat-list-item [routerLink]="['products']" (click)="handleDrawerClick(drawer)" routerLinkActive="active-route">products</a>
+      <a mat-list-item [routerLink]="['about']" (click)="handleDrawerClick(drawer)" routerLinkActive="active-route">about</a>
     </mat-nav-list>
     <mat-toolbar class="footer" color="primary">
       &copy; {{currentYear}} arbirary
