@@ -1,4 +1,5 @@
-# [insert logo here]
+<img src="./src/assets/arbitrary-dark.png" style="width: 250px">
+
 https://ar.bitrary.dev
 ___
 Welcome to the repository for the portfolio website for arbitrary. We are a software development group that primarily makes applications and tools revolving around Tesla vehicles.
