@@ -12,14 +12,16 @@ import { MatSidenav } from '@angular/material/sidenav';
 export class AppComponent {
   currentYear : number;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
+  isHandset$: Observable<boolean>;
 
   constructor(private breakpointObserver: BreakpointObserver) {
     this.currentYear = new Date().getFullYear();
+
+    this.isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
+      .pipe(
+        map(result => result.matches),
+        shareReplay()
+      );
   }
 
   handleDrawerClick(drawer : MatSidenav) {
