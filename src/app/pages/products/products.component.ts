@@ -37,10 +37,28 @@ export class ProductsComponent implements OnInit {
         prodURL : 'https://testube.app',
         license : 'GPL-3.0',
         font    : 'Cairo',
+      },
+      {
+        name: 'Digalog',
+        desc: `a simple wearOS watch face that appears analog on the surface, but integrates a digital time on the hour and minute hands for quick reference.`,
+        logoURL : null,
+        repoURL : null,
+        prodURL : 'https://play.google.com/store/apps/details?id=com.arbitrary.digalog',
+        license : null,
+        font    : null,
       }
     ]
 
     this.devProds = [
+      {
+        name: 'sentinel',
+        desc: `a free, open-source Windows, macOS, and Linux application that allows you to efficiently view, manage, and export sentry and dashcam footage from your Tesla vehicle. It does require you to have access to the USB drive containing the footage.`,
+        logoURL : null,
+        repoURL : 'https://github.com/arbitrarydot/sentinel',
+        prodURL : null,
+        license : 'GPL-3.0',
+        font    : 'Quantico', 
+      },
       {
         name: 'copilot',
         desc: `a one-stop-shop for managing your tesla vehicle on any of your devices.`,
