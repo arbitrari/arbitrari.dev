@@ -15,6 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { ProductsComponent } from './pages/products/products.component';
 import { AboutComponent } from './pages/about/about.component';
+import { PrivacyComponent } from './pages/privacy/privacy.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { AboutComponent } from './pages/about/about.component';
     HomeComponent,
     ProductsComponent,
     AboutComponent,
+    PrivacyComponent,
   ],
   imports: [
     BrowserModule,

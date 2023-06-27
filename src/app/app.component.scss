@@ -33,3 +33,8 @@ mat-sidenav-content {
     background: black;
     color: white;
 }
+
+a {
+  color: rgb(var(--arbitrary-white-rgb));
+  text-decoration: none;
+}

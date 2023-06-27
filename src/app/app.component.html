@@ -12,7 +12,7 @@
       <a mat-list-item [routerLink]="['about']" (click)="handleDrawerClick(drawer)" routerLinkActive="active-route">about</a>
     </mat-nav-list>
     <mat-toolbar class="footer" color="primary">
-      &copy; {{currentYear}} arbirary
+      &copy; {{currentYear}} arbirary &bull;&nbsp;<a [routerLink]="['privacy']">Privacy</a>
     </mat-toolbar>
   </mat-sidenav>
   <mat-sidenav-content>
