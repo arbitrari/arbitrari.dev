@@ -21,31 +21,36 @@
 @include mat.all-legacy-component-typographies();
 @include mat.legacy-core();
 
-$arbitrary-black: (
-    50: #000000,
-    contrast: (
-        50: white
-    )
-);
+$arbitrary-black: (50: #000000,
+            100: #000000,
+            500: #000000,
+            700: #000000,
+  contrast: (50: white, 100: white, 500: white, 700: white));
 
-$arbitrary-blue: (
-    50: rgb(48, 63, 255),
-    contrast: (
-        50: white
-    )
-);
+$arbitrary-blue: (50: rgb(48, 63, 255),
+            100: rgb(48, 63, 255),
+            500: rgb(48, 63, 255),
+            700: rgb(48, 63, 255),
+  contrast: (50: white, 100: white, 500: white, 700: white));
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$arbitrary-primary: mat.define-palette($arbitrary-black);
-$arbitrary-accent: mat.define-palette($arbitrary-blue);
+$arbitrary-primary: mat.define-palette($arbitrary-black, 500);
+$arbitrary-accent: mat.define-palette($arbitrary-blue, 500);
 
 // The warn palette is optional (defaults to red).
 $arbitrary-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$arbitrary-theme: mat.define-light-theme($arbitrary-primary, $arbitrary-accent, $arbitrary-warn);
+$arbitrary-theme: mat.define-light-theme((
+    color: (
+        primary: $arbitrary-primary,
+        accent: $arbitrary-accent,
+        warn: $arbitrary-warn
+    ),
+    density: 0
+));
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
