@@ -16,6 +16,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { ProductsComponent } from './pages/products/products.component';
 import { AboutComponent } from './pages/about/about.component';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
+import { BrandingComponent } from './pages/branding/branding.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { PrivacyComponent } from './pages/privacy/privacy.component';
     ProductsComponent,
     AboutComponent,
     PrivacyComponent,
+    BrandingComponent,
   ],
   imports: [
     BrowserModule,

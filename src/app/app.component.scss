@@ -21,6 +21,10 @@
 mat-toolbar.footer {
     font-size: 12px;
     font-weight: 300;
+
+    &.footer-links {
+      height: 24px;
+    }
 }
 
 .active-route,

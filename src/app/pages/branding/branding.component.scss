@@ -1,0 +1,32 @@
+p {
+    margin-top: 64px;
+    font-size: 20px;
+    line-height: 40px;
+    font-weight: 300;
+    max-width: 800px;
+}
+
+h2 {
+    font-size: 40px;
+    line-height: 40px;
+    margin-top: 16px;
+}
+
+
+a {
+    color: rgb(var(--arbitrary-white-rgb));
+    text-decoration: none;
+}
+
+.color-swatch {
+    display: inline-block;
+    width: 250px;
+    height: 250px;
+    padding: 16px;
+    font-size: x-large;
+    font-weight: bolder;
+
+    div {
+        margin-bottom: 8px;
+    }
+}

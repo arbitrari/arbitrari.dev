@@ -11,8 +11,11 @@
       <a mat-list-item [routerLink]="['products']" (click)="handleDrawerClick(drawer)" routerLinkActive="active-route">products</a>
       <a mat-list-item [routerLink]="['about']" (click)="handleDrawerClick(drawer)" routerLinkActive="active-route">about</a>
     </mat-nav-list>
+    <mat-toolbar class="footer footer-links" color="primary">
+      <a [routerLink]="['privacy']">privacy</a>&nbsp;&bull;&nbsp;<a [routerLink]="['branding']">branding</a>
+    </mat-toolbar>
     <mat-toolbar class="footer" color="primary">
-      &copy; {{currentYear}} arbirary &bull;&nbsp;<a [routerLink]="['privacy']">Privacy</a>
+      &copy; {{currentYear}} arbirary
     </mat-toolbar>
   </mat-sidenav>
   <mat-sidenav-content>
