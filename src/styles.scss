@@ -1,16 +1,16 @@
+@use '~@angular/material' as mat;
 @import url('https://fonts.googleapis.com/css?family=Cairo&display=swap');
 @import url('https://fonts.googleapis.com/css?family=ABeeZee');
 @import url('https://fonts.googleapis.com/css?family=Quantico');
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 $arbitrary-black: (
     50: #000000,
@@ -29,19 +29,19 @@ $arbitrary-blue: (
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$arbitrary-primary: mat-palette($arbitrary-black);
-$arbitrary-accent: mat-palette($arbitrary-blue);
+$arbitrary-primary: mat.define-palette($arbitrary-black);
+$arbitrary-accent: mat.define-palette($arbitrary-blue);
 
 // The warn palette is optional (defaults to red).
-$arbitrary-warn: mat-palette($mat-red);
+$arbitrary-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$arbitrary-theme: mat-light-theme($arbitrary-primary, $arbitrary-accent, $arbitrary-warn);
+$arbitrary-theme: mat.define-light-theme($arbitrary-primary, $arbitrary-accent, $arbitrary-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($arbitrary-theme);
+@include mat.all-component-themes($arbitrary-theme);
 
 /* You can add global styles to this file, and also import other style files */
 
