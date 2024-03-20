@@ -1,8 +1,8 @@
 <img src="./src/assets/arbitrary-dark.png" style="width: 250px">
 
-https://ar.bitrary.dev
+https://arbitrari.dev
 ___
-Welcome to the repository for the portfolio website for arbitrary. We are a software development group that primarily makes applications and tools revolving around Tesla vehicles.
+Welcome to the repository for the portfolio website for arbitrari. We are a software development group that primarily makes applications and tools revolving around Tesla vehicles.
 
 ## Develop
 This is an Angular application, so when you clone the repository, you must run `npm install` to grab all dependencies, and then use `ng serve` to host a live development copy at `http://localhost:4200`. This should be familiary with you if you are an Angular developer.
