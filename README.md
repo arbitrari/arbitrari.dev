@@ -1,4 +1,8 @@
-<img src="./src/assets/arbitrary-dark.png" style="width: 250px">
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./src/assets/arbitrari-white.png">
+    <source media="(prefers-color-scheme: light)" srcset="./src/assets/arbitrari-black.png">
+    <img src="./src/assets/arbitrari-black.png" width="250">
+</picture>
 
 https://arbitrari.dev
 ___
