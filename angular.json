@@ -28,8 +28,7 @@
               "src/CNAME"
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/pattern.css/pattern.scss"
+              "src/styles.scss"
             ],
             "scripts": [],
             "vendorChunk": true,
