@@ -10,7 +10,7 @@ import { Title } from '@angular/platform-browser';
 export class AboutComponent implements OnInit {
 
   constructor(private title : Title) { 
-    this.title.setTitle('arbitrary - about');
+    this.title.setTitle('about • arbitrari');
   }
 
   ngOnInit(): void {

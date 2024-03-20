@@ -22,7 +22,7 @@ export class ProductsComponent implements OnInit {
   devProds : Product[]; 
 
   constructor(private title : Title) { 
-    this.title.setTitle('arbitrary - products');
+    this.title.setTitle('products • arbitrari');
   }
 
   ngOnInit(): void {
