@@ -35,7 +35,7 @@ mat-toolbar.footer {
 a.mat-list-item:hover,
 .mat-nav-list a.mat-list-item:focus {
     font-weight: 500;
-    background: rgb(var(--arbitrary-gray-rgb));
+    background: rgba(var(--arbitrary-blue-rgb),0.25);
 }
 
 mat-sidenav-content {
