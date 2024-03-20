@@ -4,7 +4,7 @@
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar color="primary">
-      <img src="../assets/arbitrary-white.png" style="height: 45%; margin-left: auto; margin-right: auto">
+      <img src="../assets/arbitrari-white.png" style="height: 45%; margin-left: auto; margin-right: auto">
     </mat-toolbar>
     <mat-nav-list>
       <a mat-list-item [routerLink]="['/']" (click)="handleDrawerClick(drawer)" routerLinkActive="active-route" [routerLinkActiveOptions]="{exact: true}">home</a>
